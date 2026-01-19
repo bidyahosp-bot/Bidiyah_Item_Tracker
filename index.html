@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bidiyah Hospital - Item Tracker</title>
+  <style>
+    table.items-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    table.items-table th {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+    table.items-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+    table.items-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    table.items-table tr:hover {
+      background: #eaf3ff;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bidiyah Hospital</h1>
+  <h2>Item Tracker</h2>
+
+  <div class="form-box">
+    <form id="usageForm">
+      <label>Staff No & Name:</label>
+      <input type="text" id="staff" placeholder="e.g. 123 - Ali Nurse" required>
+
+      <label>Shift:</label>
+      <select id="shift">
+        <option>Morning</option>
+        <option>Evening</option>
+        <option>Night</option>
+      </select>
+
+      <label>Department Sent To:</label>
+      <select id="department">
+        <option>OPD</option>
+        <option>DM</option>
+        <option>IP</option>
+        <option>ANC</option>
+        <option>LR</option>
+      </select>
+
+      <label>Signed By:</label>
+      <select id="signedBy">
+        <option>Sender</option>
+        <option>Receiver</option>
+      </select>
+
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th colspan="5">Available Items</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><label class="checkbox-label"><input type="checkbox" name="items" value="Suturing Set"> Suturing Set</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="Dressing Set"> Dressing Set</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="Ear Wash"> Ear Wash</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="Mosquito Forceps"> Mosquito Forceps</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="(Dm) dreesing set ARTERY"> (Dm) dreesing set ARTERY</label></td>
+    </tr>
+    <tr>
+      <td><label class="checkbox-label"><input type="checkbox" name="items" value="G.TRY"> G.TRY</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="TOOTH FORCEPS "> TOOTH FORCEPS </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="MOSQUITO FORCEPS "> MOSQUITO FORCEPS </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="SPECULUM "> SPECULUM </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="COS-COS"> COS-COS</label></td>
+    </tr>
+  <tr>
+<td><label class="checkbox-label"><input type="checkbox" name="items" value="ING TRY "> ING TRY </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="SPONGE-HOLDER"> SPONGE-HOLDER</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="SCISSORS "> SCISSORS </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="HOLE REMOVEL SCISSOR"> HOLE REMOVEL SCISSOR</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="AMPO BAG NEEDLE HOLDER"> AMPO BAG NEEDLE HOLDER</label></td>
+</tr>
+  <tr>
+<td><label class="checkbox-label"><input type="checkbox" name="items" value="MOTHER DRAPE"> MOTHER DRAPE</label></td>
+   <td><label class="checkbox-label"> <input type="checkbox" name="items" value="BABY DRAPE "> BABY DRAPE </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="LMA"> LMA</label></td>   
+    <td><label class="checkbox-label"> <input type="checkbox" name="items" value="I UCO REMOVEL"> I UCO REMOVEL</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="BWOL">BWOL</label></td>
+</tr>
+  <tr>
+ <td><label class="checkbox-label"><input type="checkbox" name="items" value="FACE MASK ">FACE MASK </label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="HOLE TWOL"> HOLE TWOL</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="SUCTION TUBE">SUCTION TUBE</label></td>    
+     <td><label class="checkbox-label"><input type="checkbox" name="items" value="Ormerod aural Forceps"> Ormerod aural Forceps</label></td>
+    <td><label class="checkbox-label"><input type="checkbox" name="items" value="Skin Hook "> Skin Hook </label></td>
+</tr>
+
+        </tbody>
+      </table>
+
+      <button type="submit">Record Usage</button>
+    </form><button onclick="window.location.href='log.html'">View Log</button>
+  </div>
+
+  <script>
+    document.getElementById("usageForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const selectedItems = [];
+      document.querySelectorAll('input[name="items"]:checked').forEach(item => {
+        selectedItems.push(item.value);
+      });
+
+      const log = {
+        staff: document.getElementById("staff").value,
+        shift: document.getElementById("shift").value,
+        department: document.getElementById("department").value,
+        signedBy: document.getElementById("signedBy").value,
+        items: selectedItems,
+        datetime: new Date().toLocaleString()
+      };
+
+      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      logs.push(log);
+      localStorage.setItem("usageLogs", JSON.stringify(logs));
+
+      alert("Usage recorded successfully!");
+      document.getElementById("usageForm").reset();
+    });
+  </script>
+</body>
+</html>
+

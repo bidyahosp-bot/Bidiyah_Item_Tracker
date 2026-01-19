@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bidiyah Hospital - Usage Log</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f7fa; }
+    h1 { text-align: center; color: #007bff; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #007bff; color: white; }
+    button { padding: 8px 12px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+    .print-btn { background: #28a745; color: white; }
+    .export-btn { background: #17a2b8; color: white; }
+    .back-btn { background: #007bff; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Bidiyah Hospital - Usage Log</h1>
+
+  <!-- أزرار التحكم -->
+  <div style="text-align:center;">
+    <button class="print-btn" onclick="window.print()">🖨️ Print Log</button>
+    <button class="export-btn" onclick="exportCSV()">⬇️ Export CSV</button>
+    <button class="back-btn" onclick="window.location.href='index.html'">⬅️ Back to Registration</button>
+  </div>
+
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>Staff No & Name</th>
+        <th>Shift</th>
+        <th>Department</th>
+        <th>Signed By</th>
+        <th>Items</th>
+        <th>Date & Time</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function renderLogs() {
+      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      const tbody = document.querySelector("#logTable tbody");
+      tbody.innerHTML = "";
+
+      logs.forEach(log => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${log.staff}</td>
+          <td>${log.shift}</td>
+          <td>${log.department}</td>
+          <td>${log.signedBy}</td>
+          <td>${log.items.join(", ")}</td>
+          <td>${log.datetime}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function exportCSV() {
+      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      if (logs.length === 0) {
+        alert("No records to export.");
+        return;
+      }
+
+      let csvContent = "Staff No & Name,Shift,Department,Signed By,Items,Date & Time\n";
+      logs.forEach(log => {
+        csvContent += `"${log.staff}","${log.shift}","${log.department}","${log.signedBy}","${log.items.join("; ")}","${log.datetime}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "usage_log.csv";
+      link.click();
+    }
+
+    renderLogs();
+  </script>
+</body>
+</html>
