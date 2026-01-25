@@ -9,10 +9,13 @@
     table { border-collapse: collapse; width: 100%; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
     th { background: #007bff; color: white; }
-    button { padding: 8px 12px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+    button { padding: 6px 10px; margin: 2px; border: none; border-radius: 4px; cursor: pointer; }
     .print-btn { background: #28a745; color: white; }
     .export-btn { background: #17a2b8; color: white; }
+    .excel-btn { background: #ffc107; color: black; }
     .back-btn { background: #007bff; color: white; }
+    .edit-btn { background: #ff5722; color: white; }
+    .delete-btn { background: #dc3545; color: white; }
   </style>
 </head>
 <body>
@@ -22,6 +25,7 @@
   <div style="text-align:center;">
     <button class="print-btn" onclick="window.print()">🖨️ Print Log</button>
     <button class="export-btn" onclick="exportCSV()">⬇️ Export CSV</button>
+    <button class="excel-btn" onclick="exportExcel()">📊 Export Excel</button>
     <button class="back-btn" onclick="window.location.href='index.html'">⬅️ Back to Registration</button>
   </div>
 
@@ -34,10 +38,14 @@
         <th>Signed By</th>
         <th>Items</th>
         <th>Date & Time</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
+
+  <!-- مكتبة XLSX من CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
     function renderLogs() {
@@ -45,7 +53,7 @@
       const tbody = document.querySelector("#logTable tbody");
       tbody.innerHTML = "";
 
-      logs.forEach(log => {
+      logs.forEach((log, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td>${log.staff}</td>
@@ -54,9 +62,43 @@
           <td>${log.signedBy}</td>
           <td>${log.items.join(", ")}</td>
           <td>${log.datetime}</td>
+          <td>
+            <button class="edit-btn" onclick="editLog(${index})">Edit</button>
+            <button class="delete-btn" onclick="deleteLog(${index})">Delete</button>
+          </td>
         `;
         tbody.appendChild(row);
       });
+    }
+
+    function deleteLog(index) {
+      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      logs.splice(index, 1);
+      localStorage.setItem("usageLogs", JSON.stringify(logs));
+      renderLogs();
+      alert("Record deleted successfully.");
+    }
+
+    function editLog(index) {
+      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      const log = logs[index];
+
+      // طلب إدخال رقم الموظف للتحقق
+      const enteredStaff = prompt("Enter your Staff No to edit this record:");
+      if (!enteredStaff) return;
+
+      // التحقق من التطابق
+      if (!log.staff.startsWith(enteredStaff)) {
+        alert("You are not authorized to edit this record.");
+        return;
+      }
+
+      // إذا الرقم صحيح، إعادة البيانات إلى صفحة التسجيل
+      localStorage.setItem("editLog", JSON.stringify(log));
+      logs.splice(index, 1); // حذف السجل القديم حتى يتم استبداله
+      localStorage.setItem("usageLogs", JSON.stringify(logs));
+      alert("Authorized. Redirecting to registration page for editing...");
+      window.location.href = "index.html";
     }
 
     function exportCSV() {
@@ -76,6 +118,19 @@
       link.href = URL.createObjectURL(blob);
       link.download = "usage_log.csv";
       link.click();
+    }
+
+    function exportExcel() {
+      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
+      if (logs.length === 0) {
+        alert("No records to export.");
+        return;
+      }
+
+      const worksheet = XLSX.utils.json_to_sheet(logs);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Usage Log");
+      XLSX.writeFile(workbook, "usage_log.xlsx");
     }
 
     renderLogs();
