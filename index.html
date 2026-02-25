@@ -1,276 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bidiyah Hospital - Item Tracker</title>
-  <style>
-    table.items-table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 15px;
-      background: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    table.items-table th {
-      background: #007bff;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      font-size: 16px;
-    }
-    table.items-table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-      font-size: 14px;
-    }
-    table.items-table tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-    table.items-table tr:hover {
-      background: #eaf3ff;
-    }
-    .checkbox-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bidiyah Hospital - Item Tracker (Shared)</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Bidiyah Hospital</h1>
-  <h2>Item Tracker</h2>
+  <header class="topbar">
+    <div class="brand">
+      <img src="logo.png" class="logo" alt="MOH Logo">
+      <div class="titles">
+        <h1>Bidiyah Hospital</h1>
+        <h2>Item Tracker</h2>
+      </div>
+    </div>
 
-  <div class="form-box">
-    <form id="usageForm">
-      <label>Staff No & Name:</label>
-      <input type="text" id="staff" placeholder="e.g. 12345 - Alia Nurse" required>
+    <nav class="topnav">
+      <a class="navlink active" href="index.html">Register</a>
+      <a class="navlink" href="log.html">View Log</a>
+    </nav>
+  </header>
 
-      <label>Shift:</label>
-      <select id="shift">
-        <option>Morning</option>
-        <option>Evening</option>
-        <option>Night</option>
-      </select>
+  <main class="container">
+    <section class="panel">
+      <h3>Record Usage</h3>
 
-      <label>Department Sent To:</label>
-      <select id="department">
-        <option>OPD</option>
-        <option>DM</option>
-        <option>IP</option>
-        <option>ANC</option>
-        <option>LR</option>
-        <option>BS</option>
-      </select>
+      <div class="form-grid">
+        <div>
+          <label>Staff No & Name</label>
+          <input id="staff" type="text" placeholder="e.g. 12345 - Alia Nurse" required />
+        </div>
 
-      <label>Signed By:</label>
-      <select id="signedBy">
-        <option>Sender</option>
-        <option>Receiver</option>
-      </select>
+        <div>
+          <label>Shift</label>
+          <select id="shift">
+            <option>Morning</option>
+            <option>Evening</option>
+            <option>Night</option>
+          </select>
+        </div>
 
-      <table class="items-table">
-        <thead>
-          <tr>
-            <th colspan="5">Available Items</th>
-          </tr>
-        </thead>
-        <tbody>
-          <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="Suturing Set"> Suturing Set
-        </label>
-        <input type="number" name="qty-Suturing Set" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="Dressing Set"> Dressing Set
-        </label>
-        <input type="number" name="qty-Dressing Set" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="Ear Wash"> Ear Wash
-        </label>
-        <input type="number" name="qty-Ear Wash" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="Mosquito Forceps"> Mosquito Forceps
-        </label>
-        <input type="number" name="qty-Mosquito Forceps" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="(Dm) dreesing set ARTERY"> (Dm) dreesing set ARTERY
-        </label>
-        <input type="number" name="qty-(Dm) dreesing set ARTERY" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="G.TRY"> G.TRY
-        </label>
-        <input type="number" name="qty-G.TRY" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="TOOTH FORCEPS"> TOOTH FORCEPS
-        </label>
-        <input type="number" name="qty-TOOTH FORCEPS" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="MOSQUITO FORCEPS"> MOSQUITO FORCEPS
-        </label>
-        <input type="number" name="qty-MOSQUITO FORCEPS" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="SPECULUM"> SPECULUM
-        </label>
-        <input type="number" name="qty-SPECULUM" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-      <td>
-        <label class="checkbox-label">
-          <input type="checkbox" name="items" value="COS-COS"> COS-COS
-        </label>
-        <input type="number" name="qty-COS-COS" min="0" placeholder="Qty" style="width:60px;">
-      </td>
-    </tr>
-          <tr>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="ING TRY"> ING TRY
-    </label>
-    <input type="number" name="qty-ING TRY" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="SPONGE-HOLDER"> SPONGE-HOLDER
-    </label>
-    <input type="number" name="qty-SPONGE-HOLDER" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="SCISSORS"> SCISSORS
-    </label>
-    <input type="number" name="qty-SCISSORS" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="HOLE REMOVEL SCISSOR"> HOLE REMOVEL SCISSOR
-    </label>
-    <input type="number" name="qty-HOLE REMOVEL SCISSOR" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="AMPO BAG NEEDLE HOLDER"> AMPO BAG NEEDLE HOLDER
-    </label>
-    <input type="number" name="qty-AMPO BAG NEEDLE HOLDER" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-</tr>
-<tr>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="MOTHER DRAPE"> MOTHER DRAPE
-    </label>
-    <input type="number" name="qty-MOTHER DRAPE" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="BABY DRAPE"> BABY DRAPE
-    </label>
-    <input type="number" name="qty-BABY DRAPE" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="LMA"> LMA
-    </label>
-    <input type="number" name="qty-LMA" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="I UCO REMOVEL"> I UCO REMOVEL
-    </label>
-    <input type="number" name="qty-I UCO REMOVEL" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="BWOL"> BWOL
-    </label>
-    <input type="number" name="qty-BWOL" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-</tr>
-<tr>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="FACE MASK"> FACE MASK
-    </label>
-    <input type="number" name="qty-FACE MASK" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="HOLE TWOL"> HOLE TWOL
-    </label>
-    <input type="number" name="qty-HOLE TWOL" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="SUCTION TUBE"> SUCTION TUBE
-    </label>
-    <input type="number" name="qty-SUCTION TUBE" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="Ormerod aural Forceps"> Ormerod aural Forceps
-    </label>
-    <input type="number" name="qty-Ormerod aural Forceps" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-  <td>
-    <label class="checkbox-label">
-      <input type="checkbox" name="items" value="Skin Hook"> Skin Hook
-    </label>
-    <input type="number" name="qty-Skin Hook" min="0" placeholder="Qty" style="width:60px;">
-  </td>
-</tr>
+        <div>
+          <label>Department Sent To</label>
+          <select id="department">
+            <option>OPD</option>
+            <option>DM</option>
+            <option>IP</option>
+            <option>ANC</option>
+            <option>LR</option>
+            <option>BS</option>
+          </select>
+        </div>
 
-        </tbody>
-      </table>
+        <div>
+          <label>Signed By</label>
+          <select id="signedBy">
+            <option>Sender</option>
+            <option>Receiver</option>
+          </select>
+        </div>
+      </div>
 
-      <button type="submit">Record Usage</button>
-    </form><button onclick="window.location.href='log.html'">View Log</button>
-  </div>
+      <div class="panel-sub">
+        <div class="panel-sub-head">
+          <h4>Available Items</h4>
+          <div class="small muted">Tick item then enter Qty (optional)</div>
+        </div>
 
-  <script>
-    document.getElementById("usageForm").addEventListener("submit", function(e){
-      e.preventDefault();
-      const selectedItems = [];
-      document.querySelectorAll('input[name="items"]:checked').forEach(item => {
-        selectedItems.push(item.value);
-      });
+        <div class="items-grid" id="itemsGrid">
+          <!-- Filled by JS -->
+        </div>
+      </div>
 
-      const log = {
-        staff: document.getElementById("staff").value,
-        shift: document.getElementById("shift").value,
-        department: document.getElementById("department").value,
-        signedBy: document.getElementById("signedBy").value,
-        items: selectedItems,
-        datetime: new Date().toLocaleString()
-      };
+      <div class="actions">
+        <button class="btn" id="btnSave" type="button">Record Usage</button>
+        <button class="btn secondary" id="btnReset" type="button">Reset</button>
+      </div>
 
-      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      logs.push(log);
-      localStorage.setItem("usageLogs", JSON.stringify(logs));
+      <p class="hint">
+        Data is saved to Google Sheet (shared across devices). If network is down, it will temporarily save locally and sync when back.
+      </p>
+    </section>
 
-      alert("Usage recorded successfully!");
-      document.getElementById("usageForm").reset();
-    });
-  </script>
+    <section class="panel">
+      <div class="table-head">
+        <h3>Recent Records</h3>
+        <div class="table-actions">
+          <button class="btn secondary" id="btnRefresh" type="button">Refresh</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="recentTable"></table>
+      </div>
+    </section>
+
+    <footer class="footer">PREPARED BY: JOUHARAH.IT</footer>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
-
