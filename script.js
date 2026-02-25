@@ -5,7 +5,7 @@
 // 3) Also supports offline queue: if saving fails, it queues locally and retries on refresh.
 // ------------------------------------------------------------
 
-const APP_SCRIPT_URL = ""; // <-- PASTE /exec URL HERE
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec"; // <-- PASTE /exec URL HERE
 const STORAGE_LOGS = "item_tracker_logs_v1";
 const STORAGE_QUEUE = "item_tracker_queue_v1";
 
