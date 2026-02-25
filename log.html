@@ -1,139 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bidiyah Hospital - Usage Log</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f7fa; }
-    h1 { text-align: center; color: #007bff; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #007bff; color: white; }
-    button { padding: 6px 10px; margin: 2px; border: none; border-radius: 4px; cursor: pointer; }
-    .print-btn { background: #28a745; color: white; }
-    .export-btn { background: #17a2b8; color: white; }
-    .excel-btn { background: #ffc107; color: black; }
-    .back-btn { background: #007bff; color: white; }
-    .edit-btn { background: #ff5722; color: white; }
-    .delete-btn { background: #dc3545; color: white; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bidiyah Hospital - Usage Log (Shared)</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Bidiyah Hospital - Usage Log</h1>
+  <header class="topbar">
+    <div class="brand">
+      <img src="logo.png" class="logo" alt="MOH Logo">
+      <div class="titles">
+        <h1>Bidiyah Hospital</h1>
+        <h2>Usage Log</h2>
+      </div>
+    </div>
 
-  <!-- أزرار التحكم -->
-  <div style="text-align:center;">
-    <button class="print-btn" onclick="window.print()">🖨️ Print Log</button>
-    <button class="export-btn" onclick="exportCSV()">⬇️ Export CSV</button>
-    <button class="excel-btn" onclick="exportExcel()">📊 Export Excel</button>
-    <button class="back-btn" onclick="window.location.href='index.html'">⬅️ Back to Registration</button>
-  </div>
+    <nav class="topnav">
+      <a class="navlink" href="index.html">Register</a>
+      <a class="navlink active" href="log.html">View Log</a>
+    </nav>
+  </header>
 
-  <table id="logTable">
-    <thead>
-      <tr>
-        <th>Staff No & Name</th>
-        <th>Shift</th>
-        <th>Department</th>
-        <th>Signed By</th>
-        <th>Items</th>
-        <th>Date & Time</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <main class="container">
+    <section class="panel">
+      <div class="table-head">
+        <h3>All Records</h3>
+        <div class="table-actions">
+          <button class="btn secondary" id="btnRefresh" type="button">Refresh</button>
+          <button class="btn secondary" id="btnPrint" type="button">Print</button>
+          <button class="btn" id="btnExportCSV" type="button">Export CSV</button>
+        </div>
+      </div>
 
-  <!-- مكتبة XLSX من CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+      <div class="filters">
+        <div>
+          <label>Filter: Department</label>
+          <select id="filterDept">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div>
+          <label>Filter: Shift</label>
+          <select id="filterShift">
+            <option value="">All</option>
+            <option>Morning</option>
+            <option>Evening</option>
+            <option>Night</option>
+          </select>
+        </div>
+        <div>
+          <label>Search: Staff</label>
+          <input id="filterStaff" type="text" placeholder="type staff no or name..." />
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="logTable"></table>
+      </div>
+    </section>
+
+    <footer class="footer">PREPARED BY: JOUHARAH.IT</footer>
+  </main>
 
   <script>
-    function renderLogs() {
-      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      const tbody = document.querySelector("#logTable tbody");
-      tbody.innerHTML = "";
-
-      logs.forEach((log, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${log.staff}</td>
-          <td>${log.shift}</td>
-          <td>${log.department}</td>
-          <td>${log.signedBy}</td>
-          <td>${log.items.join(", ")}</td>
-          <td>${log.datetime}</td>
-          <td>
-            <button class="edit-btn" onclick="editLog(${index})">Edit</button>
-            <button class="delete-btn" onclick="deleteLog(${index})">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    function deleteLog(index) {
-      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      logs.splice(index, 1);
-      localStorage.setItem("usageLogs", JSON.stringify(logs));
-      renderLogs();
-      alert("Record deleted successfully.");
-    }
-
-    function editLog(index) {
-      let logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      const log = logs[index];
-
-      // طلب إدخال رقم الموظف للتحقق
-      const enteredStaff = prompt("Enter your Staff No to edit this record:");
-      if (!enteredStaff) return;
-
-      // التحقق من التطابق
-      if (!log.staff.startsWith(enteredStaff)) {
-        alert("You are not authorized to edit this record.");
-        return;
-      }
-
-      // إذا الرقم صحيح، إعادة البيانات إلى صفحة التسجيل
-      localStorage.setItem("editLog", JSON.stringify(log));
-      logs.splice(index, 1); // حذف السجل القديم حتى يتم استبداله
-      localStorage.setItem("usageLogs", JSON.stringify(logs));
-      alert("Authorized. Redirecting to registration page for editing...");
-      window.location.href = "index.html";
-    }
-
-    function exportCSV() {
-      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      if (logs.length === 0) {
-        alert("No records to export.");
-        return;
-      }
-
-      let csvContent = "Staff No & Name,Shift,Department,Signed By,Items,Date & Time\n";
-      logs.forEach(log => {
-        csvContent += `"${log.staff}","${log.shift}","${log.department}","${log.signedBy}","${log.items.join("; ")}","${log.datetime}"\n`;
-      });
-
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "usage_log.csv";
-      link.click();
-    }
-
-    function exportExcel() {
-      const logs = JSON.parse(localStorage.getItem("usageLogs")) || [];
-      if (logs.length === 0) {
-        alert("No records to export.");
-        return;
-      }
-
-      const worksheet = XLSX.utils.json_to_sheet(logs);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Usage Log");
-      XLSX.writeFile(workbook, "usage_log.xlsx");
-    }
-
-    renderLogs();
+    window.APP_MODE = "log";
   </script>
+  <script src="script.js"></script>
 </body>
 </html>
