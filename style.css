@@ -43,6 +43,23 @@ input,select{width:100%;padding:8px;border:1px solid var(--border);border-radius
 .btn:disabled{opacity:.6;cursor:not-allowed}
 .hint{margin:10px 0 0 0;color:var(--muted);font-size:12px}
 
+td button {
+  padding:5px 8px;
+  margin:2px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+td button:first-child {
+  background:#fbbf24;
+}
+
+td button:last-child {
+  background:#ef4444;
+  color:#fff;
+}
+
 .table-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .table-actions{display:flex;gap:8px;flex-wrap:wrap}
 .table-wrap{overflow:auto}
