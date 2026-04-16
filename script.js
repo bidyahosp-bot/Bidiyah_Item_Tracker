@@ -221,7 +221,34 @@ function renderRecentTable(logs) {
     table.appendChild(tr);
   });
 }
+// ---------- ACTIONS ----------
 
+async function deleteLog(id) {
+  if (!confirm("هل تريد حذف هذا السجل؟")) return;
+
+  let logs = await loadLogs();
+  logs = logs.filter(l => l.id !== id);
+
+  await saveLogsReplaceAll(logs);
+  await refreshUI();
+}
+
+async function editLog(id) {
+  const logs = await loadLogs();
+  const log = logs.find(l => l.id === id);
+
+  if (!log) return alert("Record not found");
+
+  document.getElementById("staff").value = log.staff;
+  document.getElementById("shift").value = log.shift;
+  document.getElementById("department").value = log.department;
+  document.getElementById("signedBy").value = log.signedBy;
+
+  const newLogs = logs.filter(l => l.id !== id);
+  await saveLogsReplaceAll(newLogs);
+
+  alert("تم تحميل البيانات للتعديل، قم بالحفظ مرة أخرى");
+}
 function renderLogTable(logs) {
   const table = el("logTable");
   if (!table) return;
@@ -237,21 +264,7 @@ function renderLogTable(logs) {
       <th>Actions</th>
     </tr>
   `;
-   async function deleteLog(id) {
-  if (!confirm("هل تريد حذف هذا السجل؟")) return;
-
-  let logs = await loadLogs();
-  logs = logs.filter(l => l.id !== id);
-
-  await saveLogsReplaceAll(logs);
-  await refreshUI();
-}
-  async function editLog(id) {
-  const logs = await loadLogs();
-  const log = logs.find(l => l.id === id);
-
-  if (!log) return alert("Record not found");
-
+   
   // تعبئة الفورم
   document.getElementById("staff").value = log.staff;
   document.getElementById("shift").value = log.shift;
