@@ -2,9 +2,6 @@
 // ================== CONFIG ==================
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec";
 
-const STORAGE_LOGS = "item_tracker_logs_v1";
-const STORAGE_QUEUE = "item_tracker_queue_v1";
-
 // ================== ITEMS ==================
 const ITEMS = [
   "Suturing Set","Dressing Set","Ear Wash","Mosquito Forceps",
@@ -18,10 +15,6 @@ const ITEMS = [
 // ================== HELPERS ==================
 function el(id){ return document.getElementById(id); }
 
-function safeParse(json, fallback){
-  try { return JSON.parse(json) ?? fallback; } catch { return fallback; }
-}
-
 function makeId(){
   return Date.now() + "_" + Math.random().toString(16).slice(2);
 }
@@ -34,9 +27,7 @@ function escapeHtml(str){
   return String(str)
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(">","&gt;");
 }
 
 // ================== API ==================
@@ -47,104 +38,54 @@ async function apiRequest(action, payload){
   });
 
   const text = await res.text();
-  let data;
-  try{ data = JSON.parse(text);}catch{}
+  const data = JSON.parse(text);
 
-  if(!res.ok || !data || data.ok !== true){
-    throw new Error("Server error");
-  }
+  if(!data.ok) throw new Error("Error");
   return data;
 }
 
 // ================== DATA ==================
 async function loadLogs(){
-  if(APP_SCRIPT_URL){
-    const data = await apiRequest("usage_list",{});
-    return data.logs || [];
-  }
-  return safeParse(localStorage.getItem(STORAGE_LOGS),[]);
+  const data = await apiRequest("usage_list",{});
+  return data.logs || [];
 }
 
-async function saveLogsReplaceAll(logs){
-  if(APP_SCRIPT_URL){
-    await apiRequest("usage_replace_all",{logs});
-    return;
-  }
-  localStorage.setItem(STORAGE_LOGS, JSON.stringify(logs));
+async function saveLogs(logs){
+  await apiRequest("usage_replace_all",{logs});
 }
 
 // ================== ACTIONS ==================
 async function deleteLog(id){
-  if(!confirm("هل تريد حذف السجل؟")) return;
+  if(!confirm("حذف السجل؟")) return;
 
   let logs = await loadLogs();
-  logs = logs.filter(l => l.id !== id);
+  logs = logs.filter(l=>l.id !== id);
 
-  await saveLogsReplaceAll(logs);
-  await refreshUI();
+  await saveLogs(logs);
+  refreshUI();
 }
 
 async function editLog(id){
   const logs = await loadLogs();
-  const log = logs.find(l => l.id === id);
-
-  if(!log) return;
+  const log = logs.find(l=>l.id===id);
 
   el("staff").value = log.staff;
   el("shift").value = log.shift;
   el("department").value = log.department;
   el("signedBy").value = log.signedBy;
 
-  // حذف القديم
-  const newLogs = logs.filter(l => l.id !== id);
-  await saveLogsReplaceAll(newLogs);
+  logs.splice(logs.indexOf(log),1);
+  await saveLogs(logs);
 
-  alert("تم تحميل البيانات للتعديل - اضغط حفظ");
+  alert("تم تحميل للتعديل");
 }
 
-// ================== FORM ==================
-function buildLogFromForm(){
-  const staff = el("staff").value.trim();
-  if(!staff) throw new Error("Enter staff");
-
-  const selected = [];
-
-  document.querySelectorAll(".item-check:checked").forEach(cb=>{
-    const name = cb.dataset.name;
-    const qty = document.querySelector(`[data-qty="${CSS.escape(name)}"]`).value;
-    selected.push({item:name, qty: qty?Number(qty):""});
-  });
-
-  if(selected.length === 0) throw new Error("اختر عنصر واحد على الأقل");
-
-  return {
-    id: makeId(),
-    staff,
-    shift: el("shift").value,
-    department: el("department").value,
-    signedBy: el("signedBy").value,
-    items: selected,
-    datetime: new Date().toLocaleString(),
-    iso: nowISO()
-  };
-}
-
-function resetForm(){
-  el("staff").value="";
-  el("shift").value="Morning";
-  el("department").value="OPD";
-  el("signedBy").value="Sender";
-
-  document.querySelectorAll(".item-check").forEach(i=>i.checked=false);
-  document.querySelectorAll("[data-qty]").forEach(i=>i.value="");
-}
-function renderItemsGrid() {
+// ================== ITEMS ==================
+function renderItemsGrid(){
   const grid = el("itemsGrid");
-  if (!grid) return;
-
   grid.innerHTML = "";
 
-  ITEMS.forEach((name) => {
+  ITEMS.forEach(name=>{
     const div = document.createElement("div");
 
     div.innerHTML = `
@@ -158,41 +99,53 @@ function renderItemsGrid() {
     grid.appendChild(div);
   });
 }
-// ================== TABLE ==================
 
-function renderLogTable(logs){
-  const table = el("logTable");
-  if(!table) return;
+// ================== FORM ==================
+function buildLog(){
+  const selected = [];
+
+  document.querySelectorAll(".item-check:checked").forEach(cb=>{
+    const name = cb.dataset.name;
+    const qty = document.querySelector(`[data-qty="${CSS.escape(name)}"]`).value;
+    selected.push({item:name, qty: qty||""});
+  });
+
+  return {
+    id: makeId(),
+    staff: el("staff").value,
+    shift: el("shift").value,
+    department: el("department").value,
+    signedBy: el("signedBy").value,
+    items: selected,
+    datetime: new Date().toLocaleString(),
+    iso: nowISO()
+  };
+}
+
+// ================== TABLE ==================
+function renderRecent(logs){
+  const table = el("recentTable");
 
   table.innerHTML = `
   <tr>
     <th>Staff</th>
     <th>Shift</th>
-    <th>Department</th>
-    <th>Signed By</th>
+    <th>Dept</th>
     <th>Items</th>
     <th>Date</th>
-    <th>Actions</th>
   </tr>`;
 
-  logs.sort((a,b)=> b.iso.localeCompare(a.iso));
-
-  logs.forEach(l=>{
+  logs.slice(-10).reverse().forEach(l=>{
     const tr = document.createElement("tr");
 
-    const items = l.items.map(x=> x.qty? `${x.item} (${x.qty})`:x.item).join(", ");
+    const items = l.items.map(x=>x.qty?`${x.item}(${x.qty})`:x.item).join(",");
 
     tr.innerHTML = `
-    <td>${escapeHtml(l.staff)}</td>
-    <td>${escapeHtml(l.shift)}</td>
-    <td>${escapeHtml(l.department)}</td>
-    <td>${escapeHtml(l.signedBy)}</td>
-    <td>${escapeHtml(items)}</td>
-    <td>${escapeHtml(l.datetime)}</td>
-    <td>
-      <button onclick="editLog('${l.id}')">✏️</button>
-      <button onclick="deleteLog('${l.id}')">🗑️</button>
-    </td>
+      <td>${l.staff}</td>
+      <td>${l.shift}</td>
+      <td>${l.department}</td>
+      <td>${items}</td>
+      <td>${l.datetime}</td>
     `;
 
     table.appendChild(tr);
@@ -201,36 +154,28 @@ function renderLogTable(logs){
 
 // ================== SAVE ==================
 async function onSave(){
-  try{
-    const log = buildLogFromForm();
+  const log = buildLog();
 
-    const logs = await loadLogs();
-    logs.push(log);
+  const logs = await loadLogs();
+  logs.push(log);
 
-    await saveLogsReplaceAll(logs);
+  await saveLogs(logs);
 
-    alert("تم الحفظ");
-    resetForm();
-    refreshUI();
-
-  }catch(e){
-    alert(e.message);
-  }
+  alert("تم الحفظ");
+  refreshUI();
 }
 
 // ================== INIT ==================
 async function refreshUI(){
   const logs = await loadLogs();
-  renderLogTable(logs);
+  renderRecent(logs);
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-
   renderItemsGrid();
-  
-  el("btnSave")?.addEventListener("click", onSave);
-  el("btnReset")?.addEventListener("click", resetForm);
-  el("btnRefresh")?.addEventListener("click", refreshUI);
+
+  el("btnSave").onclick = onSave;
+  el("btnRefresh").onclick = refreshUI;
 
   refreshUI();
 });
