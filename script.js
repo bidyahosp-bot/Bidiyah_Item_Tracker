@@ -138,8 +138,28 @@ function resetForm(){
   document.querySelectorAll(".item-check").forEach(i=>i.checked=false);
   document.querySelectorAll("[data-qty]").forEach(i=>i.value="");
 }
+function renderItemsGrid() {
+  const grid = el("itemsGrid");
+  if (!grid) return;
 
+  grid.innerHTML = "";
+
+  ITEMS.forEach((name) => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <label>
+        <input type="checkbox" class="item-check" data-name="${name}">
+        ${name}
+      </label>
+      <input type="number" data-qty="${name}" placeholder="Qty">
+    `;
+
+    grid.appendChild(div);
+  });
+}
 // ================== TABLE ==================
+
 function renderLogTable(logs){
   const table = el("logTable");
   if(!table) return;
@@ -205,6 +225,9 @@ async function refreshUI(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+
+  renderItemsGrid();
+  
   el("btnSave")?.addEventListener("click", onSave);
   el("btnReset")?.addEventListener("click", resetForm);
   el("btnRefresh")?.addEventListener("click", refreshUI);
