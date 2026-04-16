@@ -304,6 +304,10 @@ function renderLogTable(logs) {
       <td>${escapeHtml(l.signedBy||"")}</td>
       <td style="text-align:left">${escapeHtml(items)}</td>
       <td>${escapeHtml(l.datetime||"")}</td>
+      <td>
+  <button onclick="editLog('${l.id}')">✏️</button>
+  <button onclick="deleteLog('${l.id}')">🗑️</button>
+</td>
     `;
     table.appendChild(tr);
   });
