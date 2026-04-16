@@ -1,104 +1,50 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bidiyah Hospital - Item Tracker (Shared)</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>Bidiyah Hospital</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="logo.png" class="logo" alt="MOH Logo">
-      <div class="titles">
-        <h1>Bidiyah Hospital</h1>
-        <h2>Item Tracker</h2>
-      </div>
-    </div>
 
-    <nav class="topnav">
-      <a class="navlink active" href="index.html">Register</a>
-      <a class="navlink" href="log.html">View Log</a>
-    </nav>
-  </header>
+<h2>Record Usage</h2>
 
-  <main class="container">
-    <section class="panel">
-      <h3>Record Usage</h3>
+<input id="staff" placeholder="Staff Name">
 
-      <div class="form-grid">
-        <div>
-          <label>Staff No & Name</label>
-          <input id="staff" type="text" placeholder="e.g. 12345 - Alia Nurse" required />
-        </div>
+<select id="shift">
+<option>Morning</option>
+<option>Evening</option>
+<option>Night</option>
+</select>
 
-        <div>
-          <label>Shift</label>
-          <select id="shift">
-            <option>Morning</option>
-            <option>Evening</option>
-            <option>Night</option>
-          </select>
-        </div>
+<select id="department">
+<option>OPD</option>
+<option>DM</option>
+<option>IP</option>
+</select>
 
-        <div>
-          <label>Department Sent To</label>
-          <select id="department">
-            <option>OPD</option>
-            <option>DM</option>
-            <option>IP</option>
-            <option>ANC</option>
-            <option>LR</option>
-            <option>BS</option>
-          </select>
-        </div>
+<select id="signedBy">
+<option>Sender</option>
+<option>Receiver</option>
+</select>
 
-        <div>
-          <label>Signed By</label>
-          <select id="signedBy">
-            <option>Sender</option>
-            <option>Receiver</option>
-          </select>
-        </div>
-      </div>
+<h3>Items</h3>
+<div id="itemsGrid"></div>
 
-      <div class="panel-sub">
-        <div class="panel-sub-head">
-          <h4>Available Items</h4>
-          <div class="small muted">Tick item then enter Qty (optional)</div>
-        </div>
+<button id="btnSave">Save</button>
+<button id="btnReset">Reset</button>
 
-        <div class="items-grid" id="itemsGrid">
-          <!-- Filled by JS -->
-        </div>
-      </div>
+<hr>
 
-      <div class="actions">
-        <button class="btn" id="btnSave" type="button">Record Usage</button>
-        <button class="btn secondary" id="btnReset" type="button">Reset</button>
-      </div>
+<h3>Recent Records</h3>
+<button id="btnRefresh">Refresh</button>
 
-      <p class="hint">
-        Data is saved to Google Sheet (shared across devices). If network is down, it will temporarily save locally and sync when back.
-      </p>
-    </section>
+<table id="recentTable"></table>
 
-    <section class="panel">
-      <div class="table-head">
-        <h3>Recent Records</h3>
-        <div class="table-actions">
-          <button class="btn secondary" id="btnRefresh" type="button">Refresh</button>
-        </div>
-      </div>
+<script src="script.js"></script>
 
-      <div class="table-wrap">
-        <table id="recentTable"></table>
-      </div>
-    </section>
-
-    <footer class="footer">PREPARED BY: JOUHARAH.IT</footer>
-  </main>
-
-  <script src="script.js"></script>
 </body>
 </html>
+```
