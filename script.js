@@ -195,6 +195,7 @@ function renderRecentTable(logs) {
       <th>Signed By</th>
       <th>Items</th>
       <th>Date & Time</th>
+      <th>Actions</th>
     </tr>
   `;
 
@@ -212,6 +213,10 @@ function renderRecentTable(logs) {
       <td>${escapeHtml(l.signedBy||"")}</td>
       <td style="text-align:left">${escapeHtml(items)}</td>
       <td>${escapeHtml(l.datetime||"")}</td>
+       <td>
+      <button onclick="editLog('${l.id}')">✏️</button>
+      <button onclick="deleteLog('${l.id}')">🗑️</button>
+    </td>
     `;
     table.appendChild(tr);
   });
@@ -229,9 +234,36 @@ function renderLogTable(logs) {
       <th>Signed By</th>
       <th>Items</th>
       <th>Date & Time</th>
+      <th>Actions</th>
     </tr>
   `;
+   async function deleteLog(id) {
+  if (!confirm("هل تريد حذف هذا السجل؟")) return;
 
+  let logs = await loadLogs();
+  logs = logs.filter(l => l.id !== id);
+
+  await saveLogsReplaceAll(logs);
+  await refreshUI();
+}
+  async function editLog(id) {
+  const logs = await loadLogs();
+  const log = logs.find(l => l.id === id);
+
+  if (!log) return alert("Record not found");
+
+  // تعبئة الفورم
+  document.getElementById("staff").value = log.staff;
+  document.getElementById("shift").value = log.shift;
+  document.getElementById("department").value = log.department;
+  document.getElementById("signedBy").value = log.signedBy;
+
+  // حذف القديم
+  const newLogs = logs.filter(l => l.id !== id);
+  await saveLogsReplaceAll(newLogs);
+
+  alert("تم تحميل البيانات للتعديل، قم بالحفظ مرة أخرى");
+}
   // Filters
   const dept = (el("filterDept")?.value || "").trim();
   const shift = (el("filterShift")?.value || "").trim();
