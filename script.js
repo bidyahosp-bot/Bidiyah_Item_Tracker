@@ -4,7 +4,6 @@
 // 2) If APP_SCRIPT_URL is empty, app falls back to localStorage (single device).
 // 3) Also supports offline queue: if saving fails, it queues locally and retries on refresh.
 // ------------------------------------------------------------
-```javascript
 // ================== CONFIG ==================
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec";
 
@@ -133,7 +132,6 @@ function renderItemsGrid(){
     grid.appendChild(card);
   });
 }
-
 // ================== FORM ==================
 function buildLog(){
   const staff = el("staff").value.trim();
@@ -276,4 +274,3 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   refreshUI();
 });
-```
