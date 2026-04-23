@@ -20,12 +20,11 @@
 </select>
 
 <select id="department">
-  <option>OPD</option>
-  <option>DM</option>
-  <option>IP</option>
-  <option>ANC</option>
-  <option>L.R</option>
-  <option>BS</option>
+<option>OPD</option>
+<option>DM</option>
+<option>IP</option>
+<option>ANC</option>
+<option>L.R</option>
 </select>
 
 <select id="signedBy">
@@ -33,21 +32,24 @@
 <option>Receiver</option>
 </select>
 
+<select id="setStatus">
+<option value="Complete">Complete</option>
+<option value="Not Complete">Not Complete</option>
+</select>
+
 <h3>Items</h3>
-<div id="itemsGrid"></div>
+<div id="itemsGrid" class="items-grid"></div>
 
 <button id="btnSave">Save</button>
-<button id="btnReset">Reset</button>
+<button id="btnRefresh">Refresh</button>
 
 <hr>
 
 <h3>Recent Records</h3>
-<button id="btnRefresh">Refresh</button>
-
 <table id="recentTable"></table>
 
 <script src="script.js"></script>
 
 </body>
 </html>
-```
+
