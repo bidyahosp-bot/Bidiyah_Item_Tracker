@@ -70,3 +70,33 @@ th{background:var(--primary);color:#fff;position:sticky;top:0}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
 
 .footer{text-align:center;padding:18px;color:var(--muted);font-size:12px}
+
+.item-card {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 10px;
+  transition: 0.2s;
+}
+
+.item-card:hover {
+  border-color: #0077b6;
+  transform: scale(1.02);
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.qty {
+  width: 70px;
+  border-radius: 8px;
+}
