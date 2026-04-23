@@ -2,37 +2,15 @@
 // ================== CONFIG ==================
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec";
 
-const STORAGE_LOGS = "item_tracker_logs_v1";
-
 // ================== ITEMS ==================
 const ITEMS = [
-  "Suturing Set",
-  "Dressing Set",
-  "Ear Wash",
-  "Mosquito Forceps",
-  "(Dm) dreesing set ARTERY",
-  "G.TRY",
-  "TOOTH FORCEPS",
-  "MOSQUITO FORCEPS",
-  "SPECULUM",
-  "COS-COS",
-  "ING TRY",
-  "SPONGE-HOLDER",
-  "SCISSORS",
-  "HOLE REMOVEL SCISSOR",
-  "AMPO BAG NEEDLE HOLDER",
-  "MOTHER DRAPE",
-  "BABY DRAPE",
-  "LMA",
-  "IUCD Removal",
-  "IUCD SET",
-  "DRESSING (com)",
-  "BWOL",
-  "FACE MASK",
-  "HOLE TWOL",
-  "SUCTION TUBE",
-  "Ormerod aural Forceps",
-  "Skin Hook",
+  "Suturing Set","Dressing Set","Ear Wash","Mosquito Forceps",
+  "(Dm) dreesing set ARTERY","G.TRY","TOOTH FORCEPS","MOSQUITO FORCEPS",
+  "SPECULUM","COS-COS","ING TRY","SPONGE-HOLDER","SCISSORS",
+  "HOLE REMOVEL SCISSOR","AMPO BAG NEEDLE HOLDER","MOTHER DRAPE",
+  "BABY DRAPE","LMA","IUCD Removal","IUCD SET","DRESSING (com)",
+  "BWOL","FACE MASK","HOLE TWOL","SUCTION TUBE",
+  "Ormerod aural Forceps","Skin Hook"
 ];
 
 // ================== HELPERS ==================
@@ -46,13 +24,6 @@ function nowISO(){
   return new Date().toISOString();
 }
 
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;");
-}
-
 // ================== API ==================
 async function apiRequest(action, payload){
   const res = await fetch(APP_SCRIPT_URL,{
@@ -60,9 +31,7 @@ async function apiRequest(action, payload){
     body: JSON.stringify({action,payload})
   });
 
-  const text = await res.text();
-  const data = JSON.parse(text);
-
+  const data = await res.json();
   if(!data.ok) throw new Error("Server error");
   return data;
 }
@@ -73,18 +42,18 @@ async function loadLogs(){
   return data.logs || [];
 }
 
-async function saveLogsReplaceAll(logs){
+async function saveLogs(logs){
   await apiRequest("usage_replace_all",{logs});
 }
 
 // ================== ACTIONS ==================
 async function deleteLog(id){
-  if(!confirm("هل تريد حذف السجل؟")) return;
+  if(!confirm("Delete record?")) return;
 
   let logs = await loadLogs();
   logs = logs.filter(l=>l.id !== id);
 
-  await saveLogsReplaceAll(logs);
+  await saveLogs(logs);
   refreshUI();
 }
 
@@ -92,140 +61,93 @@ async function editLog(id){
   const logs = await loadLogs();
   const log = logs.find(l=>l.id===id);
 
-  if(!log) return;
-
   el("staff").value = log.staff;
   el("shift").value = log.shift;
   el("department").value = log.department;
   el("signedBy").value = log.signedBy;
+  el("setStatus").value = log.setStatus || "Complete";
 
-  const newLogs = logs.filter(l=>l.id !== id);
-  await saveLogsReplaceAll(newLogs);
+  logs = logs.filter(l=>l.id !== id);
+  await saveLogs(logs);
 
-  alert("تم تحميل البيانات للتعديل، اضغط حفظ");
+  alert("Edit loaded → Save again");
 }
 
-// ================== ITEMS UI ==================
+// ================== ITEMS ==================
 function renderItemsGrid(){
   const grid = el("itemsGrid");
-  if(!grid) return;
-
   grid.innerHTML = "";
 
   ITEMS.forEach(name=>{
-    const card = document.createElement("div");
-    card.className = "item-card";
+    const div = document.createElement("div");
+    div.className = "item-card";
 
-    card.innerHTML = `
+    div.innerHTML = `
       <div class="item-row">
-        <label class="item-name">
+        <label>
           <input type="checkbox" class="item-check" data-name="${name}">
-          <span>${name}</span>
+          ${name}
         </label>
         <input type="number" class="qty" data-qty="${name}" placeholder="Qty">
       </div>
     `;
 
-    grid.appendChild(card);
+    grid.appendChild(div);
   });
 }
 
 // ================== FORM ==================
 function buildLog(){
-  const staff = el("staff").value.trim();
-  if(!staff) throw new Error("ادخل اسم الموظف");
-
   const selected = [];
 
   document.querySelectorAll(".item-check:checked").forEach(cb=>{
     const name = cb.dataset.name;
-    const qtyInput = document.querySelector(`[data-qty="${CSS.escape(name)}"]`);
-    const qty = qtyInput ? qtyInput.value : "";
-    selected.push({item:name, qty: qty || ""});
+    const qty = document.querySelector(`[data-qty="${CSS.escape(name)}"]`).value;
+    selected.push({item:name, qty});
   });
 
-  if(selected.length === 0) throw new Error("اختر عنصر واحد على الأقل");
+  if(selected.length === 0) throw new Error("Select item");
 
   return {
     id: makeId(),
-    staff,
+    staff: el("staff").value,
     shift: el("shift").value,
     department: el("department").value,
     signedBy: el("signedBy").value,
+    setStatus: el("setStatus").value,
     items: selected,
     datetime: new Date().toLocaleString(),
     iso: nowISO()
   };
 }
 
-function resetForm(){
-  el("staff").value="";
-  el("shift").value="Morning";
-  el("department").value="OPD";
-  el("signedBy").value="Sender";
-
-  document.querySelectorAll(".item-check").forEach(i=>i.checked=false);
-  document.querySelectorAll(".qty").forEach(i=>i.value="");
-}
-
 // ================== TABLE ==================
-function renderRecentTable(logs){
+function renderRecent(logs){
   const table = el("recentTable");
-  if(!table) return;
 
   table.innerHTML = `
   <tr>
     <th>Staff</th>
     <th>Shift</th>
-    <th>Department</th>
-    <th>Items</th>
-    <th>Date</th>
-  </tr>`;
-
-  logs.slice(-10).reverse().forEach(l=>{
-    const tr = document.createElement("tr");
-
-    const items = l.items.map(x=>x.qty?`${x.item} (${x.qty})`:x.item).join(", ");
-
-    tr.innerHTML = `
-      <td>${l.staff}</td>
-      <td>${l.shift}</td>
-      <td>${l.department}</td>
-      <td>${items}</td>
-      <td>${l.datetime}</td>
-    `;
-
-    table.appendChild(tr);
-  });
-}
-
-function renderLogTable(logs){
-  const table = el("logTable");
-  if(!table) return;
-
-  table.innerHTML = `
-  <tr>
-    <th>Staff</th>
-    <th>Shift</th>
-    <th>Department</th>
-    <th>Signed By</th>
+    <th>Dept</th>
+    <th>Status</th>
     <th>Items</th>
     <th>Date</th>
     <th>Actions</th>
   </tr>`;
 
-  logs.sort((a,b)=> b.iso.localeCompare(a.iso));
-
-  logs.forEach(l=>{
+  logs.slice(-10).reverse().forEach(l=>{
     const tr = document.createElement("tr");
 
-    const items = l.items.map(x=>x.qty?`${x.item} (${x.qty})`:x.item).join(", ");
+    const items = l.items.map(x=>x.qty?`${x.item}(${x.qty})`:x.item).join(",");
+
+    const color = l.setStatus==="Complete" ? "green" : "red";
 
     tr.innerHTML = `
       <td>${l.staff}</td>
       <td>${l.shift}</td>
       <td>${l.department}</td>
-      <td>${l.signedBy}</td>
+      <td style="color:${color};font-weight:bold">${l.setStatus}</td>
       <td>${items}</td>
       <td>${l.datetime}</td>
       <td>
@@ -240,36 +162,29 @@ function renderLogTable(logs){
 
 // ================== SAVE ==================
 async function onSave(){
-  try{
-    const log = buildLog();
+  const log = buildLog();
 
-    const logs = await loadLogs();
-    logs.push(log);
+  const logs = await loadLogs();
+  logs.push(log);
 
-    await saveLogsReplaceAll(logs);
+  await saveLogs(logs);
 
-    alert("تم الحفظ");
-    resetForm();
-    refreshUI();
-
-  }catch(e){
-    alert(e.message);
-  }
+  alert("Saved");
+  refreshUI();
 }
 
 // ================== INIT ==================
 async function refreshUI(){
   const logs = await loadLogs();
-  renderRecentTable(logs);
-  renderLogTable(logs);
+  renderRecent(logs);
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
   renderItemsGrid();
 
-  el("btnSave")?.addEventListener("click", onSave);
-  el("btnReset")?.addEventListener("click", resetForm);
-  el("btnRefresh")?.addEventListener("click", refreshUI);
+  el("btnSave").onclick = onSave;
+  el("btnRefresh").onclick = refreshUI;
 
   refreshUI();
 });
+
