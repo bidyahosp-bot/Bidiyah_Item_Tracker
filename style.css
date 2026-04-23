@@ -95,7 +95,23 @@ th{background:var(--primary);color:#fff;position:sticky;top:0}
   gap: 8px;
   align-items: center;
 }
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:10px;
+}
 
+.item-card{
+  border:1px solid #ccc;
+  padding:10px;
+  border-radius:10px;
+  background:#fff;
+}
+
+.item-row{
+  display:flex;
+  justify-content:space-between;
+}
 .qty {
   width: 70px;
   border-radius: 8px;
