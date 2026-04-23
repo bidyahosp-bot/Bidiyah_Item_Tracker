@@ -1,9 +1,4 @@
-// Bidiyah Hospital - Item Tracker (Shared Google Sheet Backend)
-// ------------------------------------------------------------
-// 1) Put your Apps Script Web App URL (ends with /exec) below.
-// 2) If APP_SCRIPT_URL is empty, app falls back to localStorage (single device).
-// 3) Also supports offline queue: if saving fails, it queues locally and retries on refresh.
-// ------------------------------------------------------------
+```javascript id="fixed001"
 // ================== CONFIG ==================
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec";
 
@@ -113,6 +108,8 @@ async function editLog(id){
 // ================== ITEMS UI ==================
 function renderItemsGrid(){
   const grid = el("itemsGrid");
+  if(!grid) return;
+
   grid.innerHTML = "";
 
   ITEMS.forEach(name=>{
@@ -132,6 +129,7 @@ function renderItemsGrid(){
     grid.appendChild(card);
   });
 }
+
 // ================== FORM ==================
 function buildLog(){
   const staff = el("staff").value.trim();
@@ -141,7 +139,8 @@ function buildLog(){
 
   document.querySelectorAll(".item-check:checked").forEach(cb=>{
     const name = cb.dataset.name;
-    const qty = document.querySelector(`[data-qty="${CSS.escape(name)}"]`).value;
+    const qtyInput = document.querySelector(`[data-qty="${CSS.escape(name)}"]`);
+    const qty = qtyInput ? qtyInput.value : "";
     selected.push({item:name, qty: qty || ""});
   });
 
@@ -274,3 +273,4 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   refreshUI();
 });
+```
