@@ -2,15 +2,17 @@
 // ================== CONFIG ==================
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB4mi7239Mz0xh4EyDYXxChBVKKv3qJGSWsnokjeQl5XNpwK-J62llw/exec";
 
+let currentEditId = null;
+
 // ================== ITEMS ==================
 const ITEMS = [
-  "Suturing Set","Dressing Set","Ear Wash","Mosquito Forceps",
-  "(Dm) dreesing set ARTERY","G.TRY","TOOTH FORCEPS","MOSQUITO FORCEPS",
-  "SPECULUM","COS-COS","ING TRY","SPONGE-HOLDER","SCISSORS",
-  "HOLE REMOVEL SCISSOR","AMPO BAG NEEDLE HOLDER","MOTHER DRAPE",
-  "BABY DRAPE","LMA","IUCD Removal","IUCD SET","DRESSING (com)",
-  "BWOL","FACE MASK","HOLE TWOL","SUCTION TUBE",
-  "Ormerod aural Forceps","Skin Hook"
+"Suturing Set","Dressing Set","Ear Wash","Mosquito Forceps",
+"(Dm) dreesing set ARTERY","G.TRY","TOOTH FORCEPS","MOSQUITO FORCEPS",
+"SPECULUM","COS-COS","ING TRY","SPONGE-HOLDER","SCISSORS",
+"HOLE REMOVEL SCISSOR","AMPO BAG NEEDLE HOLDER","MOTHER DRAPE",
+"BABY DRAPE","LMA","IUCD Removal","IUCD SET","DRESSING (com)",
+"BWOL","FACE MASK","HOLE TWOL","SUCTION TUBE",
+"Ormerod aural Forceps","Skin Hook"
 ];
 
 // ================== HELPERS ==================
@@ -46,33 +48,6 @@ async function saveLogs(logs){
   await apiRequest("usage_replace_all",{logs});
 }
 
-// ================== ACTIONS ==================
-async function deleteLog(id){
-  if(!confirm("Delete record?")) return;
-
-  let logs = await loadLogs();
-  logs = logs.filter(l=>l.id !== id);
-
-  await saveLogs(logs);
-  refreshUI();
-}
-
-async function editLog(id){
-  const logs = await loadLogs();
-  const log = logs.find(l=>l.id===id);
-
-  el("staff").value = log.staff;
-  el("shift").value = log.shift;
-  el("department").value = log.department;
-  el("signedBy").value = log.signedBy;
-  el("setStatus").value = log.setStatus || "Complete";
-
-  logs = logs.filter(l=>l.id !== id);
-  await saveLogs(logs);
-
-  alert("Edit loaded → Save again");
-}
-
 // ================== ITEMS ==================
 function renderItemsGrid(){
   const grid = el("itemsGrid");
@@ -96,7 +71,7 @@ function renderItemsGrid(){
   });
 }
 
-// ================== FORM ==================
+// ================== BUILD ==================
 function buildLog(){
   const selected = [];
 
@@ -105,8 +80,6 @@ function buildLog(){
     const qty = document.querySelector(`[data-qty="${CSS.escape(name)}"]`).value;
     selected.push({item:name, qty});
   });
-
-  if(selected.length === 0) throw new Error("Select item");
 
   return {
     id: makeId(),
@@ -122,7 +95,7 @@ function buildLog(){
 }
 
 // ================== TABLE ==================
-function renderRecent(logs){
+function renderTable(logs){
   const table = el("recentTable");
 
   table.innerHTML = `
@@ -130,6 +103,7 @@ function renderRecent(logs){
     <th>Staff</th>
     <th>Shift</th>
     <th>Dept</th>
+    <th>Signed</th>
     <th>Status</th>
     <th>Items</th>
     <th>Date</th>
@@ -147,6 +121,7 @@ function renderRecent(logs){
       <td>${l.staff}</td>
       <td>${l.shift}</td>
       <td>${l.department}</td>
+      <td>${l.signedBy}</td>
       <td style="color:${color};font-weight:bold">${l.setStatus}</td>
       <td>${items}</td>
       <td>${l.datetime}</td>
@@ -173,10 +148,58 @@ async function onSave(){
   refreshUI();
 }
 
+// ================== DELETE ==================
+async function deleteLog(id){
+  if(!confirm("Delete?")) return;
+
+  let logs = await loadLogs();
+  logs = logs.filter(l=>l.id!==id);
+
+  await saveLogs(logs);
+  refreshUI();
+}
+
+// ================== EDIT ==================
+async function editLog(id){
+  const logs = await loadLogs();
+  const log = logs.find(l=>l.id===id);
+
+  currentEditId = id;
+
+  el("editStaff").value = log.staff;
+  el("editShift").value = log.shift;
+  el("editDepartment").value = log.department;
+  el("editSignedBy").value = log.signedBy;
+  el("editStatus").value = log.setStatus;
+
+  el("editModal").style.display = "block";
+}
+
+async function saveEdit(){
+  const logs = await loadLogs();
+
+  const i = logs.findIndex(l=>l.id===currentEditId);
+
+  logs[i].staff = el("editStaff").value;
+  logs[i].shift = el("editShift").value;
+  logs[i].department = el("editDepartment").value;
+  logs[i].signedBy = el("editSignedBy").value;
+  logs[i].setStatus = el("editStatus").value;
+
+  await saveLogs(logs);
+
+  closeModal();
+  refreshUI();
+}
+
+function closeModal(){
+  el("editModal").style.display = "none";
+}
+
 // ================== INIT ==================
 async function refreshUI(){
   const logs = await loadLogs();
-  renderRecent(logs);
+  renderTable(logs);
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
