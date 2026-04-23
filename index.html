@@ -48,6 +48,43 @@
 <h3>Recent Records</h3>
 <table id="recentTable"></table>
 
+<!-- EDIT POPUP -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3>Edit Record</h3>
+
+    <input id="editStaff">
+
+    <select id="editShift">
+      <option>Morning</option>
+      <option>Evening</option>
+      <option>Night</option>
+    </select>
+
+    <select id="editDepartment">
+      <option>OPD</option>
+      <option>DM</option>
+      <option>IP</option>
+      <option>ANC</option>
+      <option>L.R</option>
+    </select>
+
+    <select id="editSignedBy">
+      <option>Sender</option>
+      <option>Receiver</option>
+    </select>
+
+    <select id="editStatus">
+      <option value="Complete">Complete</option>
+      <option value="Not Complete">Not Complete</option>
+    </select>
+
+    <br><br>
+    <button onclick="saveEdit()">Save</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
 <script src="script.js"></script>
 
 </body>
