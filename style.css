@@ -116,3 +116,36 @@ th{background:var(--primary);color:#fff;position:sticky;top:0}
   width: 70px;
   border-radius: 8px;
 }
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:10px;
+}
+
+.item-card{
+  border:1px solid #ccc;
+  padding:10px;
+  border-radius:10px;
+  background:#fff;
+}
+
+.item-row{
+  display:flex;
+  justify-content:space-between;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.5);
+}
+
+.modal-content{
+  background:#fff;
+  padding:20px;
+  width:300px;
+  margin:100px auto;
+  border-radius:10px;
+}
