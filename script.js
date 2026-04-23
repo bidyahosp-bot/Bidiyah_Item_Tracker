@@ -176,22 +176,33 @@ async function editLog(id){
 }
 
 async function saveEdit(){
-  const logs = await loadLogs();
+  let logs = await loadLogs();
 
-  const i = logs.findIndex(l=>l.id===currentEditId);
+  // حذف السجل القديم
+  logs = logs.filter(l => l.id !== currentEditId);
 
-  logs[i].staff = el("editStaff").value;
-  logs[i].shift = el("editShift").value;
-  logs[i].department = el("editDepartment").value;
-  logs[i].signedBy = el("editSignedBy").value;
-  logs[i].setStatus = el("editStatus").value;
+  // إنشاء سجل جديد بالتعديل
+  const newLog = {
+    id: makeId(),
+    staff: el("editStaff").value,
+    shift: el("editShift").value,
+    department: el("editDepartment").value,
+    signedBy: el("editSignedBy").value,
+    setStatus: el("editStatus").value,
+    items: [], // نفس العناصر القديمة لو تبغى نضيفها لاحقاً
+    datetime: new Date().toLocaleString(),
+    iso: nowISO()
+  };
+
+  logs.push(newLog);
 
   await saveLogs(logs);
 
   closeModal();
   refreshUI();
-}
 
+  alert("تم حفظ التعديل بنجاح ✅");
+}
 function closeModal(){
   el("editModal").style.display = "none";
 }
