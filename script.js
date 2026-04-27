@@ -111,7 +111,7 @@ function buildLog(){
     shift: el("shift").value,
     department: el("department").value,
     signedBy: el("signedBy").value,
-    setStatus: (el("setStatus").value || "Not Complete").trim(),
+    setStatus: el("setStatus").value,
     items: selected,
     datetime: new Date().toLocaleString(),
     iso: nowISO()
@@ -214,7 +214,7 @@ async function saveEdit(){
     shift: el("editShift").value,
     department: el("editDepartment").value,
     signedBy: el("editSignedBy").value,
-    setStatus: (el("editStatus").value || "Not Complete").trim(),
+   setStatus: el("setStatus").value,
 
     // ✅ يحافظ على الأدوات
 items: collectEditItems(),
