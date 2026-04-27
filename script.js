@@ -87,7 +87,7 @@ function buildLog(){
     shift: el("shift").value,
     department: el("department").value,
     signedBy: el("signedBy").value,
-    setStatus: el("setStatus").value,
+    setStatus: (el("setStatus").value || "Not Complete").trim(),
     items: selected,
     datetime: new Date().toLocaleString(),
     iso: nowISO()
