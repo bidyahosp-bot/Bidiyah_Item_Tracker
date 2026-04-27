@@ -179,22 +179,19 @@ async function editLog(id){
 async function saveEdit(){
   let logs = await loadLogs();
 
-  // 🔥 جلب السجل القديم
   const oldLog = logs.find(l => l.id === currentEditId);
 
-  // حذف القديم
   logs = logs.filter(l => l.id !== currentEditId);
 
-  // إنشاء سجل جديد مع الاحتفاظ بالعناصر
   const newLog = {
     id: makeId(),
     staff: el("editStaff").value,
     shift: el("editShift").value,
     department: el("editDepartment").value,
     signedBy: el("editSignedBy").value,
-    setStatus: el("editStatus").value,
+    setStatus: (el("editStatus").value || "Not Complete").trim(),
 
-    // ✅ أهم سطر (يحافظ على الأدوات)
+    // ✅ يحافظ على الأدوات
     items: oldLog?.items || [],
 
     datetime: new Date().toLocaleString(),
