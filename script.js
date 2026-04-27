@@ -179,10 +179,13 @@ async function editLog(id){
 async function saveEdit(){
   let logs = await loadLogs();
 
-  // حذف السجل القديم
+  // 🔥 جلب السجل القديم
+  const oldLog = logs.find(l => l.id === currentEditId);
+
+  // حذف القديم
   logs = logs.filter(l => l.id !== currentEditId);
 
-  // إنشاء سجل جديد بالتعديل
+  // إنشاء سجل جديد مع الاحتفاظ بالعناصر
   const newLog = {
     id: makeId(),
     staff: el("editStaff").value,
@@ -190,7 +193,10 @@ async function saveEdit(){
     department: el("editDepartment").value,
     signedBy: el("editSignedBy").value,
     setStatus: el("editStatus").value,
-    items: logs.find(l=>l.id===currentEditId)?.items || [], // نفس العناصر القديمة لو تبغى نضيفها لاحقاً
+
+    // ✅ أهم سطر (يحافظ على الأدوات)
+    items: oldLog?.items || [],
+
     datetime: new Date().toLocaleString(),
     iso: nowISO()
   };
@@ -202,7 +208,7 @@ async function saveEdit(){
   closeModal();
   refreshUI();
 
-  alert("تم حفظ التعديل بنجاح ✅");
+  alert("تم التعديل بنجاح ✅");
 }
 function closeModal(){
   el("editModal").style.display = "none";
