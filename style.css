@@ -149,3 +149,8 @@ th{background:var(--primary);color:#fff;position:sticky;top:0}
   margin:100px auto;
   border-radius:10px;
 }
+#editItemsGrid{
+  max-height:300px;
+  overflow:auto;
+  margin-top:10px;
+}
