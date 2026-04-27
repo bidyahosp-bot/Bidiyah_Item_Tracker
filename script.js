@@ -71,6 +71,30 @@ function renderItemsGrid(){
   });
 }
 
+function renderEditItems(items){
+  const grid = el("editItemsGrid");
+  if(!grid) return;
+
+  grid.innerHTML = "";
+
+  ITEMS.forEach(name=>{
+    const found = items.find(i => i.item === name);
+
+    const checked = found ? "checked" : "";
+    const qty = found ? found.qty : "";
+
+    grid.innerHTML += `
+      <div class="item-card">
+        <label>
+          <input type="checkbox" data-name="${name}" ${checked}>
+          ${name}
+        </label>
+        <input type="number" data-qty="${name}" value="${qty}" placeholder="Qty">
+      </div>
+    `;
+  });
+}
+
 // ================== BUILD ==================
 function buildLog(){
   const selected = [];
@@ -173,6 +197,7 @@ async function editLog(id){
   el("editSignedBy").value = log.signedBy;
   el("editStatus").value = log.setStatus || "Complete";
 
+  renderEditItems(log.items || []);
   el("editModal").style.display = "block";
 }
 
@@ -192,7 +217,7 @@ async function saveEdit(){
     setStatus: (el("editStatus").value || "Not Complete").trim(),
 
     // ✅ يحافظ على الأدوات
-    items: oldLog?.items || [],
+items: collectEditItems(),
 
     datetime: new Date().toLocaleString(),
     iso: nowISO()
@@ -207,8 +232,27 @@ async function saveEdit(){
 
   alert("تم التعديل بنجاح ✅");
 }
+
 function closeModal(){
   el("editModal").style.display = "none";
+}
+
+function collectEditItems(){
+  const container = el("editItemsGrid");
+  const selected = [];
+
+  container.querySelectorAll("input[type='checkbox']").forEach(cb=>{
+    if(cb.checked){
+      const name = cb.dataset.name;
+
+      const qtyInput = container.querySelector(`[data-qty="${CSS.escape(name)}"]`);
+      const qty = qtyInput ? qtyInput.value : "";
+
+      selected.push({item:name, qty});
+    }
+  });
+
+  return selected;
 }
 
 // ================== INIT ==================
