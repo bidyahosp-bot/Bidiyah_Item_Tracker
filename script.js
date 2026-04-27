@@ -115,14 +115,15 @@ function renderTable(logs){
 
     const items = l.items.map(x=>x.qty?`${x.item}(${x.qty})`:x.item).join(",");
 
-    const color = l.setStatus==="Complete" ? "green" : "red";
+    const status = l.setStatus || "Not Complete";
+const color = status === "Complete" ? "green" : "red";
 
     tr.innerHTML = `
       <td>${l.staff}</td>
       <td>${l.shift}</td>
       <td>${l.department}</td>
       <td>${l.signedBy}</td>
-      <td style="color:${color};font-weight:bold">${l.setStatus}</td>
+      <td style="color:${color};font-weight:bold">${status}</td>
       <td>${items}</td>
       <td>${l.datetime}</td>
       <td>
@@ -170,7 +171,7 @@ async function editLog(id){
   el("editShift").value = log.shift;
   el("editDepartment").value = log.department;
   el("editSignedBy").value = log.signedBy;
-  el("editStatus").value = log.setStatus;
+  el("editStatus").value = log.setStatus || "Complete";
 
   el("editModal").style.display = "block";
 }
@@ -189,7 +190,7 @@ async function saveEdit(){
     department: el("editDepartment").value,
     signedBy: el("editSignedBy").value,
     setStatus: el("editStatus").value,
-    items: [], // نفس العناصر القديمة لو تبغى نضيفها لاحقاً
+    items: logs.find(l=>l.id===currentEditId)?.items || [], // نفس العناصر القديمة لو تبغى نضيفها لاحقاً
     datetime: new Date().toLocaleString(),
     iso: nowISO()
   };
