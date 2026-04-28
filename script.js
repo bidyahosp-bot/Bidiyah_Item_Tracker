@@ -55,8 +55,10 @@ function renderGroupedItems(){
       <div class="set-items">
         ${SETS[setName].map(item => `
           <label>
-            <input type="checkbox" class="item-check" data-name="${item}" data-set="${setName}">
-            ${item}
+            <label>
+  <span>${item}</span>
+  <input type="checkbox" class="item-check" data-name="${item}" data-set="${setName}">
+</label>
           </label>
         `).join("")}
       </div>
