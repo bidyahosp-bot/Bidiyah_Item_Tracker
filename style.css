@@ -172,3 +172,95 @@ th{background:var(--primary);color:#fff;position:sticky;top:0}
   grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
   gap:6px;
 }
+/* الصفحة */
+body{
+  font-family: "Segoe UI", Tahoma;
+  background:#f5f7fb;
+}
+
+/* الشبكة */
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:15px;
+  margin-top:10px;
+}
+
+/* الكرت */
+.set-box{
+  background:#fff;
+  border-radius:15px;
+  padding:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:0.2s;
+  border:1px solid #e0e6ed;
+}
+
+.set-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.12);
+}
+
+/* عنوان المجموعة */
+.set-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:16px;
+  font-weight:bold;
+  color:#0a4fa3;
+  margin-bottom:8px;
+  border-bottom:1px solid #eee;
+  padding-bottom:5px;
+}
+
+/* العناصر */
+.set-items{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+/* كل عنصر */
+.set-items label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fafc;
+  padding:6px 8px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:14px;
+}
+
+.set-items label:hover{
+  background:#e6f0ff;
+}
+
+/* checkbox */
+input[type="checkbox"]{
+  transform:scale(1.1);
+  accent-color:#0a4fa3;
+}
+
+/* عند التحديد */
+input[type="checkbox"]:checked + span{
+  color:#0a4fa3;
+  font-weight:bold;
+}
+
+/* الأزرار */
+button{
+  background:#0a4fa3;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  background:#083b7a;
+}
