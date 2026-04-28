@@ -5,15 +5,53 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB
 let currentEditId = null;
 
 // ================== ITEMS ==================
-const ITEMS = [
-"Suturing Set","Dressing Set","Ear Wash","Mosquito Forceps",
-"(Dm) dreesing set ARTERY","G.TRY","TOOTH FORCEPS","MOSQUITO FORCEPS",
-"SPECULUM","COS-COS","ING TRY","SPONGE-HOLDER","SCISSORS",
-"HOLE REMOVEL SCISSOR","AMPO BAG NEEDLE HOLDER","MOTHER DRAPE",
-"BABY DRAPE","LMA","IUCD Removal","IUCD SET","DRESSING (com)",
-"BWOL","FACE MASK","HOLE TWOL","SUCTION TUBE",
-"Ormerod aural Forceps","Skin Hook"
-];
+const SETS = {
+
+  "IUCD SET": [
+    "Forceps",
+    "Sponge Holder",
+    "Scissor Straight",
+    "Uterine Sound",
+    "Speculum"
+  ],
+
+  "Suturing Set": [
+    "Needle Holder",
+    "Artery Forceps",
+    "Mayo Scissor",
+    "Non tooth Forceps",
+    "Tooth Forceps",
+    "Mosquito Forceps (small)",
+    "Mosquito Forceps (big)"
+  ],
+
+  "IUCD Removal": [
+    "Speculum",
+    "Sponge Holder",
+    "Artery Forceps"
+  ],
+
+  "Dressing Set (DM)": [
+    "Mayo Scissor",
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps"
+  ],
+
+  "Dressing Set": [
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps"
+  ],
+
+  "Delivery Set": [
+    "Sponge Holder",
+    "Cord Cutting Scissor",
+    "Straight Artery Forceps",
+    "Episiotomy Scissor"
+  ]
+
+};
+
+
 
 // ================== HELPERS ==================
 function el(id){ return document.getElementById(id); }
@@ -49,27 +87,45 @@ async function saveLogs(logs){
 }
 
 // ================== ITEMS ==================
-function renderItemsGrid(){
-  const grid = el("itemsGrid");
+function renderGroupedItems(containerId="itemsGrid"){
+  const grid = document.getElementById(containerId);
   grid.innerHTML = "";
 
-  ITEMS.forEach(name=>{
-    const div = document.createElement("div");
-    div.className = "item-card";
+  Object.keys(SETS).forEach(setName => {
 
-    div.innerHTML = `
-      <div class="item-row">
-        <label>
-          <input type="checkbox" class="item-check" data-name="${name}">
-          ${name}
-        </label>
-        <input type="number" class="qty" data-qty="${name}" placeholder="Qty">
+    const setDiv = document.createElement("div");
+    setDiv.className = "set-box";
+
+    setDiv.innerHTML = `
+      <div class="set-header">
+        <input type="checkbox" class="set-check" data-set="${setName}">
+        <strong>${setName}</strong>
+      </div>
+
+      <div class="set-items">
+        ${SETS[setName].map(item => `
+          <label>
+            <input type="checkbox" class="item-check" data-name="${item}" data-set="${setName}">
+            ${item}
+          </label>
+        `).join("")}
       </div>
     `;
 
-    grid.appendChild(div);
+    grid.appendChild(setDiv);
+  });
+
+  // اختيار كامل المجموعة
+  document.querySelectorAll(".set-check").forEach(setCB=>{
+    setCB.addEventListener("change", ()=>{
+      const set = setCB.dataset.set;
+
+      document.querySelectorAll(`.item-check[data-set="${set}"]`)
+        .forEach(i => i.checked = setCB.checked);
+    });
   });
 }
+
 
 function renderEditItems(items){
   const grid = el("editItemsGrid");
@@ -237,19 +293,18 @@ function closeModal(){
   el("editModal").style.display = "none";
 }
 
-function collectEditItems(){
-  const container = el("editItemsGrid");
+function collectItems(){
   const selected = [];
 
-  container.querySelectorAll("input[type='checkbox']").forEach(cb=>{
-    if(cb.checked){
-      const name = cb.dataset.name;
+  document.querySelectorAll(".item-check:checked").forEach(cb=>{
+    selected.push({
+      item: cb.dataset.name,
+      qty: 1
+    });
+  });
 
-      const qtyInput = container.querySelector(`[data-qty="${CSS.escape(name)}"]`);
-      const qty = qtyInput ? qtyInput.value : "";
-
-      selected.push({item:name, qty});
-    }
+  return selected;
+}
   });
 
   return selected;
@@ -262,7 +317,7 @@ async function refreshUI(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  renderItemsGrid();
+  renderGroupedItems();
 
   el("btnSave").onclick = onSave;
   el("btnRefresh").onclick = refreshUI;
