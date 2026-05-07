@@ -248,56 +248,42 @@ function renderDepartmentItems(){
   `;
 
   // اختيار المجموعة كاملة
-  document.querySelectorAll(".set-check").forEach(cb=>{
-
-    cb.addEventListener("change",()=>{
-
-      const setName = cb.dataset.set;
-
-      const items = data.sets[setName];
-
-      items.forEach(item=>{
-
-        if(cb.checked){
-
-          if(!document.querySelector(`[data-name="${item}"]`)){
-
-            const hidden = document.createElement("input");
-
-            hidden.type = "checkbox";
-            hidden.checked = true;
-            hidden.className = "item-check";
-            hidden.dataset.name = item;
-
-            hidden.style.display = "none";
-
-            document.body.appendChild(hidden);
-          }
-
-        }
-
-      });
-
-    });
-
-  });
-
+  
 }
 
 
 // ================== COLLECT ==================
+
 function collectItems(){
+
   const selected = [];
 
+  // الأدوات الفردية
   document.querySelectorAll(".item-check:checked").forEach(cb=>{
+
     selected.push({
       item: cb.dataset.name,
       qty: 1
     });
+
+  });
+
+  // المجموعات
+  document.querySelectorAll(".set-check:checked").forEach(cb=>{
+
+    const setName = cb.dataset.set;
+
+    selected.push({
+      item: setName,
+      qty: "SET"
+    });
+
   });
 
   return selected;
 }
+
+
 
 // ================== BUILD ==================
 function buildLog(){
