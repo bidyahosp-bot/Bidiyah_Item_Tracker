@@ -115,20 +115,38 @@ const DEPARTMENT_DATA = {
 
   },
 
-  "L.R": {
 
-    sets: {
+"L.R": {
 
-      "Delivery Set": [
-        "Sponge Holder",
-        "Artery Straight",
-        "Episiotomy Scissor",
-        "Cord Cutting Scissor",
-        "COS COS"
-      ]
+  sets: {
 
-    },
+    "Delivery Set": [
+      "Sponge Holder",
+      "Artery Straight",
+      "Episiotomy Scissor",
+      "Cord Cutting Scissor",
+      "COS COS"
+    ]
 
+  },
+
+  singleItems: [
+    "Female Metal Catheter",
+    "Speculum",
+    "Forceps",
+    "Uterine Sound",
+    "Artery Curved",
+    "Sponge Holder",
+    "Mosquito Mini",
+    "Artery Straight",
+    "Mother Drap",
+    "Baby Drap",
+    "Episiotomy Scissor",
+    "Cord Cutting Scissor",
+    "COS COS"
+  ]
+
+},
 
 "DM": {
 
@@ -139,6 +157,25 @@ const DEPARTMENT_DATA = {
       "Mosquito Forceps (big)",
       "Non tooth Forceps"
     ]
+
+  },
+
+  singleItems: [
+    "Mayo Scissor",
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps",
+    "Tooth Forceps",
+    "Artery Straight",
+    "Artery Curved",
+    "Mosquito Curved",
+    "Mosquito Straight",
+    "Scissor",
+    "Hole Towel",
+    "Needle Holder"
+  ]
+
+}
+
 
   },
 
