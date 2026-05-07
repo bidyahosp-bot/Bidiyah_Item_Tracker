@@ -6,23 +6,20 @@ let currentEditId = null;
 
 // ================== SETS ==================
 
+
 const DEPARTMENT_DATA = {
 
   "OPD": {
+
     sets: {
 
       "Suturing Set": [
         "Needle Holder",
-        "Artery Forceps",
-        "Mayo Scissor",
-        "Non tooth Forceps",
+        "Artery Straight",
+        "Artery Curved",
+        "Mosquito Curved",
+        "Mosquito Straight",
         "Tooth Forceps",
-        "Mosquito Forceps (small)",
-        "Mosquito Forceps (big)"
-      ],
-
-      "Dressing Set": [
-        "Mosquito Forceps (big)",
         "Non tooth Forceps"
       ]
 
@@ -34,49 +31,71 @@ const DEPARTMENT_DATA = {
       "Artery Curved",
       "Artery Straight",
       "Mosquito Straight",
+      "Needle Holder",
       "Hole Removal",
       "Hook Explore",
       "Alligator Style Forceps",
       "Ormerod Aural",
       "Mosquito Mini",
       "Scissor",
-      "Hole Towel"
+      "Hole Towel",
+      "Tooth Forceps",
+      "Non tooth Forceps"
     ]
+
   },
 
   "A&E": {
+
     sets: {
 
-      "Emergency Set": [
+      "Suturing Set": [
         "Needle Holder",
-        "Artery Forceps",
-        "Mayo Scissor"
+        "Artery Straight",
+        "Artery Curved",
+        "Mosquito Curved",
+        "Mosquito Straight",
+        "Tooth Forceps",
+        "Non tooth Forceps"
       ]
 
     },
 
     singleItems: [
+      "Allis",
+      "Mosquito Curved",
+      "Artery Curved",
+      "Artery Straight",
+      "Mosquito Straight",
+      "Needle Holder",
+      "Hole Removal",
+      "Hook Explore",
+      "Alligator Style Forceps",
+      "Ormerod Aural",
+      "Mosquito Mini",
+      "Scissor",
+      "Hole Towel",
       "Tooth Forceps",
-      "Non tooth Forceps",
-      "Mosquito Curved"
+      "Non tooth Forceps"
     ]
+
   },
 
   "ANC": {
+
     sets: {
 
       "IUCD SET": [
+        "Speculum",
         "Forceps",
-        "Sponge Holder",
-        "Scissor Straight",
         "Uterine Sound",
-        "Speculum"
+        "Sponge Holder"
       ],
 
       "IUCD Removal": [
         "Speculum",
-        "Sponge Holder",
-        "Artery Forceps"
+        "Forceps",
+        "Sponge Holder"
       ]
 
     },
@@ -86,32 +105,50 @@ const DEPARTMENT_DATA = {
       "Speculum",
       "Forceps",
       "Uterine Sound",
+      "Artery Curved",
       "Sponge Holder",
+      "Mosquito Mini",
+      "Artery Straight",
       "Mother Drap",
       "Baby Drap"
     ]
+
   },
 
   "L.R": {
+
     sets: {
 
       "Delivery Set": [
         "Sponge Holder",
+        "Artery Straight",
+        "Episiotomy Scissor",
         "Cord Cutting Scissor",
-        "Straight Artery Forceps",
-        "Episiotomy Scissor"
+        "COS COS"
       ]
 
     },
 
     singleItems: [
-      "COS COS",
+      "Female Metal Catheter",
+      "Speculum",
+      "Forceps",
+      "Uterine Sound",
+      "Artery Curved",
+      "Sponge Holder",
+      "Mosquito Mini",
+      "Artery Straight",
+      "Mother Drap",
+      "Baby Drap",
+      "Episiotomy Scissor",
       "Cord Cutting Scissor",
-      "Episiotomy Scissor"
+      "COS COS"
     ]
+
   }
 
 };
+
 
 
 
