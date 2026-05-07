@@ -315,7 +315,9 @@ function renderTable(logs){
   </tr>`;
 
   logs.slice(-10).reverse().forEach(l=>{
-    const items = (l.items||[]).map(x=>x.item).join(",");
+    const items = (l.items||[])
+  .map(x => `• ${x.item}`)
+  .join("<br>");
 
     const status = l.setStatus || "Not Complete";
     const color = status === "Complete" ? "green" : "red";
