@@ -129,6 +129,36 @@ const DEPARTMENT_DATA = {
 
     },
 
+
+"DM": {
+
+  sets: {
+
+    "Dressing Set (DM)": [
+      "Mayo Scissor",
+      "Mosquito Forceps (big)",
+      "Non tooth Forceps"
+    ]
+
+  },
+
+  singleItems: [
+    "Mayo Scissor",
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps",
+    "Tooth Forceps",
+    "Artery Straight",
+    "Artery Curved",
+    "Mosquito Curved",
+    "Mosquito Straight",
+    "Scissor",
+    "Hole Towel",
+    "Needle Holder"
+  ]
+
+}
+
+
     singleItems: [
       "Female Metal Catheter",
       "Speculum",
