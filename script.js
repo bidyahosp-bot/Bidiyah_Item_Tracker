@@ -5,14 +5,115 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhh5XI70lwvQRpB
 let currentEditId = null;
 
 // ================== SETS ==================
-const SETS = {
-  "IUCD SET": ["Forceps","Sponge Holder","Scissor Straight","Uterine Sound","Speculum"],
-  "Suturing Set": ["Needle Holder","Artery Forceps","Mayo Scissor","Non tooth Forceps","Tooth Forceps","Mosquito Forceps (small)","Mosquito Forceps (big)"],
-  "IUCD Removal": ["Speculum","Sponge Holder","Artery Forceps"],
-  "Dressing Set (DM)": ["Mayo Scissor","Mosquito Forceps (big)","Non tooth Forceps"],
-  "Dressing Set": ["Mosquito Forceps (big)","Non tooth Forceps"],
-  "Delivery Set": ["Sponge Holder","Cord Cutting Scissor","Straight Artery Forceps","Episiotomy Scissor"]
+
+const DEPARTMENT_DATA = {
+
+  "OPD": {
+    sets: {
+
+      "Suturing Set": [
+        "Needle Holder",
+        "Artery Forceps",
+        "Mayo Scissor",
+        "Non tooth Forceps",
+        "Tooth Forceps",
+        "Mosquito Forceps (small)",
+        "Mosquito Forceps (big)"
+      ],
+
+      "Dressing Set": [
+        "Mosquito Forceps (big)",
+        "Non tooth Forceps"
+      ]
+
+    },
+
+    singleItems: [
+      "Allis",
+      "Mosquito Curved",
+      "Artery Curved",
+      "Artery Straight",
+      "Mosquito Straight",
+      "Hole Removal",
+      "Hook Explore",
+      "Alligator Style Forceps",
+      "Ormerod Aural",
+      "Mosquito Mini",
+      "Scissor",
+      "Hole Towel"
+    ]
+  },
+
+  "A&E": {
+    sets: {
+
+      "Emergency Set": [
+        "Needle Holder",
+        "Artery Forceps",
+        "Mayo Scissor"
+      ]
+
+    },
+
+    singleItems: [
+      "Tooth Forceps",
+      "Non tooth Forceps",
+      "Mosquito Curved"
+    ]
+  },
+
+  "ANC": {
+    sets: {
+
+      "IUCD SET": [
+        "Forceps",
+        "Sponge Holder",
+        "Scissor Straight",
+        "Uterine Sound",
+        "Speculum"
+      ],
+
+      "IUCD Removal": [
+        "Speculum",
+        "Sponge Holder",
+        "Artery Forceps"
+      ]
+
+    },
+
+    singleItems: [
+      "Female Metal Catheter",
+      "Speculum",
+      "Forceps",
+      "Uterine Sound",
+      "Sponge Holder",
+      "Mother Drap",
+      "Baby Drap"
+    ]
+  },
+
+  "L.R": {
+    sets: {
+
+      "Delivery Set": [
+        "Sponge Holder",
+        "Cord Cutting Scissor",
+        "Straight Artery Forceps",
+        "Episiotomy Scissor"
+      ]
+
+    },
+
+    singleItems: [
+      "COS COS",
+      "Cord Cutting Scissor",
+      "Episiotomy Scissor"
+    ]
+  }
+
 };
+
+
 
 // ================== HELPERS ==================
 function el(id){ return document.getElementById(id); }
@@ -36,46 +137,116 @@ async function saveLogs(logs){
 }
 
 // ================== RENDER SETS ==================
-function renderGroupedItems(){
+
+function renderDepartmentItems(){
+
+  const dept = el("department").value;
+  const data = DEPARTMENT_DATA[dept];
+
   const grid = el("itemsGrid");
-  if(!grid) return;
+
+  if(!data){
+    grid.innerHTML = "";
+    return;
+  }
 
   grid.innerHTML = "";
 
-  Object.keys(SETS).forEach(setName => {
+  // ===== SETS =====
+  Object.keys(data.sets).forEach(setName=>{
 
-    const div = document.createElement("div");
-    div.className = "set-box";
+    const items = data.sets[setName];
 
-    div.innerHTML = `
-      <div class="set-header">
-        <input type="checkbox" class="set-check" data-set="${setName}">
-        <strong>${setName}</strong>
-      </div>
-      <div class="set-items">
-        ${SETS[setName].map(item => `
+    grid.innerHTML += `
+      <div class="accordion">
+
+        <div class="accordion-header">
           <label>
-            <label>
-  <span>${item}</span>
-  <input type="checkbox" class="item-check" data-name="${item}" data-set="${setName}">
-</label>
+            <input type="checkbox"
+              class="set-check"
+              data-set="${setName}">
+            <strong>${setName}</strong>
           </label>
-        `).join("")}
+
+          <span onclick="toggleAccordion(this)">▼</span>
+        </div>
+
+        <div class="accordion-body">
+
+          ${items.map(item=>`
+            <div class="item-view">
+              • ${item}
+            </div>
+          `).join("")}
+
+        </div>
+
       </div>
     `;
-
-    grid.appendChild(div);
   });
 
-  // اختيار المجموعة
+  // ===== SINGLE ITEMS =====
+  grid.innerHTML += `
+    <div class="accordion">
+
+      <div class="accordion-header">
+        <strong>Single Items</strong>
+        <span onclick="toggleAccordion(this)">▼</span>
+      </div>
+
+      <div class="accordion-body">
+
+        ${data.singleItems.map(item=>`
+          <label class="single-item">
+            <span>${item}</span>
+            <input type="checkbox"
+              class="item-check"
+              data-name="${item}">
+          </label>
+        `).join("")}
+
+      </div>
+
+    </div>
+  `;
+
+  // اختيار المجموعة كاملة
   document.querySelectorAll(".set-check").forEach(cb=>{
+
     cb.addEventListener("change",()=>{
-      const set = cb.dataset.set;
-      document.querySelectorAll(`.item-check[data-set="${set}"]`)
-        .forEach(i=> i.checked = cb.checked);
+
+      const setName = cb.dataset.set;
+
+      const items = data.sets[setName];
+
+      items.forEach(item=>{
+
+        if(cb.checked){
+
+          if(!document.querySelector(`[data-name="${item}"]`)){
+
+            const hidden = document.createElement("input");
+
+            hidden.type = "checkbox";
+            hidden.checked = true;
+            hidden.className = "item-check";
+            hidden.dataset.name = item;
+
+            hidden.style.display = "none";
+
+            document.body.appendChild(hidden);
+          }
+
+        }
+
+      });
+
     });
+
   });
+
 }
+
 
 // ================== COLLECT ==================
 function collectItems(){
@@ -154,7 +325,11 @@ async function refreshUI(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  renderGroupedItems(); // ✅ هذا المهم
+
+  renderDepartmentItems();
+
+  // ✅ تحديث الأدوات حسب القسم
+  el("department").addEventListener("change", renderDepartmentItems);
 
   el("btnSave").onclick = onSave;
   el("btnRefresh").onclick = refreshUI;
@@ -162,3 +337,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   refreshUI();
 });
 
+function toggleAccordion(elm){
+
+  const body = elm.parentElement.nextElementSibling;
+
+  body.classList.toggle("show");
+}
