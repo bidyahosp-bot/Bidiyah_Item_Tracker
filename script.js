@@ -329,25 +329,40 @@ function buildLog(){
 }
 
 // ================== TABLE ==================
+
 function renderTable(logs){
 
   const table = el("recentTable");
 
   table.innerHTML = `
-  <tr>
-    <th>Staff</th>
-    <th>Shift</th>
-    <th>Dept</th>
-    <th>Signed</th>
-    <th>Status</th>
-    <th>Items</th>
-    <th>Date</th>
-    <th>Actions</th>
-  </tr>`;
+    <tr>
+      <th>Staff</th>
+      <th>Shift</th>
+      <th>Dept</th>
+      <th>Signed</th>
+      <th>Status</th>
+      <th>Items</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  `;
 
-  logs.slice(-10).reverse().forEach(l=>{
+  if(!logs.length){
 
-    const items = (l.items||[])
+    table.innerHTML += `
+      <tr>
+        <td colspan="8">
+          No records found
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  logs.slice(-20).reverse().forEach(l=>{
+
+    const items = (l.items || [])
       .map(x => `• ${x.item}`)
       .join("<br>");
 
@@ -359,34 +374,42 @@ function renderTable(logs){
       : "red";
 
     table.innerHTML += `
-    <tr>
+      <tr>
 
-      <td>${l.staff}</td>
-      <td>${l.shift}</td>
-      <td>${l.department}</td>
-      <td>${l.signedBy}</td>
+        <td>${l.staff}</td>
 
-      <td style="color:${color};font-weight:bold">
-        ${status}
-      </td>
+        <td>${l.shift}</td>
 
-      <td>${items}</td>
+        <td>${l.department}</td>
 
-      <td>${l.datetime}</td>
+        <td>${l.signedBy}</td>
 
-      <td>
+        <td style="color:${color};font-weight:bold">
+          ${status}
+        </td>
 
-        <button onclick="editRecord('${l.id}')">
-          ✏️
-        </button>
+        <td>${items}</td>
 
-        <button onclick="deleteRecord('${l.id}')">
-          🗑️
-        </button>
+        <td>${l.datetime}</td>
 
-      </td>
+        <td>
 
-    </tr>`;
+          <button
+            style="background:#facc15;border:none;padding:6px 10px;border-radius:8px;cursor:pointer"
+            onclick="editRecord('${l.id}')">
+            ✏️
+          </button>
+
+          <button
+            style="background:#ef4444;color:white;border:none;padding:6px 10px;border-radius:8px;cursor:pointer"
+            onclick="deleteRecord('${l.id}')">
+            🗑️
+          </button>
+
+        </td>
+
+      </tr>
+    `;
   });
 
 }
