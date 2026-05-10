@@ -115,86 +115,19 @@ const DEPARTMENT_DATA = {
 
   },
 
+  "L.R": {
 
-"L.R": {
+    sets: {
 
-  sets: {
+      "Delivery Set": [
+        "Sponge Holder",
+        "Artery Straight",
+        "Episiotomy Scissor",
+        "Cord Cutting Scissor",
+        "COS COS"
+      ]
 
-    "Delivery Set": [
-      "Sponge Holder",
-      "Artery Straight",
-      "Episiotomy Scissor",
-      "Cord Cutting Scissor",
-      "COS COS"
-    ]
-
-  },
-
-  singleItems: [
-    "Female Metal Catheter",
-    "Speculum",
-    "Forceps",
-    "Uterine Sound",
-    "Artery Curved",
-    "Sponge Holder",
-    "Mosquito Mini",
-    "Artery Straight",
-    "Mother Drap",
-    "Baby Drap",
-    "Episiotomy Scissor",
-    "Cord Cutting Scissor",
-    "COS COS"
-  ]
-
-},
-
-"DM": {
-
-  sets: {
-
-    "Dressing Set (DM)": [
-      "Mayo Scissor",
-      "Mosquito Forceps (big)",
-      "Non tooth Forceps"
-    ]
-
-  },
-
-  singleItems: [
-    "Mayo Scissor",
-    "Mosquito Forceps (big)",
-    "Non tooth Forceps",
-    "Tooth Forceps",
-    "Artery Straight",
-    "Artery Curved",
-    "Mosquito Curved",
-    "Mosquito Straight",
-    "Scissor",
-    "Hole Towel",
-    "Needle Holder"
-  ]
-
-}
-
-
-  },
-
-  singleItems: [
-    "Mayo Scissor",
-    "Mosquito Forceps (big)",
-    "Non tooth Forceps",
-    "Tooth Forceps",
-    "Artery Straight",
-    "Artery Curved",
-    "Mosquito Curved",
-    "Mosquito Straight",
-    "Scissor",
-    "Hole Towel",
-    "Needle Holder"
-  ]
-
-}
-
+    },
 
     singleItems: [
       "Female Metal Catheter",
@@ -212,9 +145,38 @@ const DEPARTMENT_DATA = {
       "COS COS"
     ]
 
+  },
+
+  "DM": {
+
+    sets: {
+
+      "Dressing Set (DM)": [
+        "Mayo Scissor",
+        "Mosquito Forceps (big)",
+        "Non tooth Forceps"
+      ]
+
+    },
+
+    singleItems: [
+      "Mayo Scissor",
+      "Mosquito Forceps (big)",
+      "Non tooth Forceps",
+      "Tooth Forceps",
+      "Artery Straight",
+      "Artery Curved",
+      "Mosquito Curved",
+      "Mosquito Straight",
+      "Scissor",
+      "Hole Towel",
+      "Needle Holder"
+    ]
+
   }
 
 };
+
 
 
 
