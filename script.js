@@ -330,6 +330,7 @@ function buildLog(){
 
 // ================== TABLE ==================
 function renderTable(logs){
+
   const table = el("recentTable");
 
   table.innerHTML = `
@@ -341,28 +342,55 @@ function renderTable(logs){
     <th>Status</th>
     <th>Items</th>
     <th>Date</th>
+    <th>Actions</th>
   </tr>`;
 
-  logs.slice(-10).reverse().forEach(l=>{
+  logs.slice().reverse().forEach(l=>{
+
     const items = (l.items||[])
-  .map(x => `• ${x.item}`)
-  .join("<br>");
+      .map(x => `• ${x.item}`)
+      .join("<br>");
 
     const status = l.setStatus || "Not Complete";
-    const color = status === "Complete" ? "green" : "red";
+
+    const color =
+      status === "Complete"
+      ? "green"
+      : "red";
 
     table.innerHTML += `
     <tr>
+
       <td>${l.staff}</td>
       <td>${l.shift}</td>
       <td>${l.department}</td>
       <td>${l.signedBy}</td>
-      <td style="color:${color}">${status}</td>
+
+      <td style="color:${color};font-weight:bold">
+        ${status}
+      </td>
+
       <td>${items}</td>
+
       <td>${l.datetime}</td>
+
+      <td>
+
+        <button onclick="editRecord('${l.id}')">
+          ✏️
+        </button>
+
+        <button onclick="deleteRecord('${l.id}')">
+          🗑️
+        </button>
+
+      </td>
+
     </tr>`;
   });
+
 }
+
 
 // ================== SAVE ==================
 async function onSave(){
@@ -390,6 +418,66 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   refreshUI();
 });
+
+async function deleteRecord(id){
+
+  if(!confirm("Delete this record?")) return;
+
+  let logs = await loadLogs();
+
+  logs = logs.filter(x => String(x.id) !== String(id));
+
+  await saveLogs(logs);
+
+  refreshUI();
+}
+
+async function editRecord(id){
+
+  const logs = await loadLogs();
+
+  const rec = logs.find(x => String(x.id) === String(id));
+
+  if(!rec) return;
+
+  currentEditId = id;
+
+  el("editStaff").value = rec.staff;
+  el("editShift").value = rec.shift;
+  el("editDepartment").value = rec.department;
+  el("editSignedBy").value = rec.signedBy;
+  el("editStatus").value = rec.setStatus;
+
+  el("editModal").style.display = "flex";
+}
+
+function closeModal(){
+  el("editModal").style.display = "none";
+}
+
+async function saveEdit(){
+
+  let logs = await loadLogs();
+
+  const index = logs.findIndex(
+    x => String(x.id) === String(currentEditId)
+  );
+
+  if(index === -1) return;
+
+  logs[index].staff = el("editStaff").value;
+  logs[index].shift = el("editShift").value;
+  logs[index].department = el("editDepartment").value;
+  logs[index].signedBy = el("editSignedBy").value;
+  logs[index].setStatus = el("editStatus").value;
+
+  await saveLogs(logs);
+
+  closeModal();
+
+  refreshUI();
+}
+
 
 function toggleAccordion(elm){
 
