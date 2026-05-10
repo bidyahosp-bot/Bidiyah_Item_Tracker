@@ -276,3 +276,32 @@ input[type="checkbox"]{
 
 }
 
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal-content{
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  width:320px;
+  max-width:95%;
+}
+
+.modal-content input,
+.modal-content select{
+  width:100%;
+  margin-bottom:10px;
+}
+
+td button{
+  margin:2px;
+}
+
+
