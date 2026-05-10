@@ -345,7 +345,7 @@ function renderTable(logs){
     <th>Actions</th>
   </tr>`;
 
-  logs.slice().reverse().forEach(l=>{
+  logs.slice(-10).reverse().forEach(l=>{
 
     const items = (l.items||[])
       .map(x => `• ${x.item}`)
