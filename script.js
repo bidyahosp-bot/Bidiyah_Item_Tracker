@@ -123,16 +123,14 @@ sets: {
   "Scissors Straight",
   "Forculum",
   "Speculum"
-]
+],
 
-
-
-    
 "IUCD Removal": [
   "Speculum",
   "Artery - CRV",
   "Sponge Holder"
 ]
+
 
 
 
