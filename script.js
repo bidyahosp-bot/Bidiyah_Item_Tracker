@@ -11,19 +11,32 @@ const DEPARTMENT_DATA = {
 
   "OPD": {
 
-    sets: {
+sets: {
 
-      "Suturing Set": [
-        "Needle Holder",
-        "Artery Straight",
-        "Artery Curved",
-        "Mosquito Curved",
-        "Mosquito Straight",
-        "Tooth Forceps",
-        "Non tooth Forceps"
-      ]
+  "Dressing Set": [
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps"
+  ],
 
-    },
+  "Ear Wash": [
+    "Hook Explore",
+    "Alligator Style Forceps",
+    "Ormerod Aural"
+  ],
+
+  "Suturing Set": [
+    "Needle Holder",
+    "Artery Straight",
+    "Artery Curved",
+    "Mosquito Curved",
+    "Mosquito Straight",
+    "Tooth Forceps",
+    "Non tooth Forceps"
+  ]
+
+},
+
+
 
     singleItems: [
       "Allis",
@@ -47,19 +60,37 @@ const DEPARTMENT_DATA = {
 
   "A&E": {
 
-    sets: {
+sets: {
 
-      "Suturing Set": [
-        "Needle Holder",
-        "Artery Straight",
-        "Artery Curved",
-        "Mosquito Curved",
-        "Mosquito Straight",
-        "Tooth Forceps",
-        "Non tooth Forceps"
-      ]
+  "Dressing Set": [
+    "Mosquito Forceps (big)",
+    "Non tooth Forceps"
+  ],
 
-    },
+  "Ear Wash": [
+    "Hook Explore",
+    "Alligator Style Forceps",
+    "Ormerod Aural"
+  ],
+
+  "Suturing Set": [
+    "Needle Holder",
+    "Artery Straight",
+    "Artery Curved",
+    "Mosquito Curved",
+    "Mosquito Straight",
+    "Tooth Forceps",
+    "Non tooth Forceps"
+  ],
+
+  "G - Try": [
+    "Speculum",
+    "Forceps",
+    "Sponge Holder"
+  ]
+
+},
+
 
     singleItems: [
       "Allis",
@@ -85,18 +116,25 @@ const DEPARTMENT_DATA = {
 
     sets: {
 
-      "IUCD SET": [
-        "Speculum",
-        "Forceps",
-        "Uterine Sound",
-        "Sponge Holder"
-      ],
 
-      "IUCD Removal": [
-        "Speculum",
-        "Forceps",
-        "Sponge Holder"
-      ]
+"IUCD SET": [
+  "Sponge Holder",
+  "Uterine Sound",
+  "Scissors Straight",
+  "Forculum",
+  "Speculum"
+]
+
+
+
+    
+"IUCD Removal": [
+  "Speculum",
+  "Artery - CRV",
+  "Sponge Holder"
+]
+
+
 
     },
 
@@ -117,17 +155,26 @@ const DEPARTMENT_DATA = {
 
   "L.R": {
 
-    sets: {
+sets: {
 
-      "Delivery Set": [
-        "Sponge Holder",
-        "Artery Straight",
-        "Episiotomy Scissor",
-        "Cord Cutting Scissor",
-        "COS COS"
-      ]
+  "Mother Drop": [
+    "Mother Drap"
+  ],
 
-    },
+  "Baby Drop": [
+    "Baby Drap"
+  ],
+
+  "Delivery Set": [
+    "Sponge Holder",
+    "Artery Straight",
+    "Episiotomy Scissor",
+    "Cord Cutting Scissor",
+    "COS COS"
+  ]
+
+},
+
 
     singleItems: [
       "Female Metal Catheter",
