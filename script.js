@@ -32,7 +32,7 @@ sets: {
     "Mosquito Straight",
     "Tooth Forceps",
     "Non tooth Forceps"
-  ]
+  ],
 
 },
 
@@ -54,7 +54,7 @@ sets: {
       "Hole Towel",
       "Tooth Forceps",
       "Non tooth Forceps"
-    ]
+    ],
 
   },
 
@@ -87,7 +87,7 @@ sets: {
     "Speculum",
     "Forceps",
     "Sponge Holder"
-  ]
+  ],
 
 },
 
@@ -108,7 +108,7 @@ sets: {
       "Hole Towel",
       "Tooth Forceps",
       "Non tooth Forceps"
-    ]
+    ],
 
   },
 
@@ -129,7 +129,7 @@ sets: {
   "Speculum",
   "Artery - CRV",
   "Sponge Holder"
-]
+],
 
 
 
@@ -147,7 +147,7 @@ sets: {
       "Artery Straight",
       "Mother Drap",
       "Baby Drap"
-    ]
+    ],
 
   },
 
@@ -169,7 +169,7 @@ sets: {
     "Episiotomy Scissor",
     "Cord Cutting Scissor",
     "COS COS"
-  ]
+  ],
 
 },
 
@@ -188,7 +188,7 @@ sets: {
       "Episiotomy Scissor",
       "Cord Cutting Scissor",
       "COS COS"
-    ]
+    ],
 
   },
 
@@ -200,7 +200,7 @@ sets: {
         "Mayo Scissor",
         "Mosquito Forceps (big)",
         "Non tooth Forceps"
-      ]
+      ],
 
     },
 
@@ -216,7 +216,7 @@ sets: {
       "Scissor",
       "Hole Towel",
       "Needle Holder"
-    ]
+    ],
 
   }
 
